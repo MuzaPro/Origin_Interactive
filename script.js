@@ -38,13 +38,13 @@ const states = {
 
 // Animation paths
 const animations = {
-    "1-2": "renders/seq1.webm",
-    "2-1": "renders/seq1_reverse.webm",
+    "1-2": "assets/animations/seq1.webm",
+    "2-1": "assets/animations/seq1_reverse.webm",
     "1-5": "assets/animations/1to5.webm",
     "5-1": "assets/animations/5to1.webm",
-    "2-3": "renders/seq2.webm",
-    "3-2": "renders/seq2_reverse.webm",
-    "3-1": "renders/seq3.webm",
+    "2-3": "assets/animations/seq2.webm",
+    "3-2": "assets/animations/seq2_reverse.webm",
+    "3-1": "assets/animations/seq3.webm",
     "1-3": "assets/animations/1to3.webm" 
 };
 
