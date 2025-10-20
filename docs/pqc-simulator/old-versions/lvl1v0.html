@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W-System Quantum Demo - Level 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --secondary-bg: #0F282D;
+            --main-bg: #183948;
+            --menu-bar: #09181F;
+            --secondary: #166470;
+            --accent: #3EC1C9;
+            --text-overlay-bg: rgba(15, 40, 45, 0.8);
+            --menu-gradient: linear-gradient(90deg, #0F282D 0%, rgba(15, 40, 45, 0.8) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Overpass', sans-serif;
+            background: var(--main-bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--menu-bar);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .header h1 {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .header p {
+            color: #ccc;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .atom-visualization {
+            flex: 2;
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            border: 1px solid var(--secondary);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .energy-diagram {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .energy-level {
+            position: absolute;
+            width: 80%;
+            height: 3px;
+            background: var(--secondary);
+            left: 10%;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .energy-level.excited {
+            background: var(--accent);
+        }
+
+        .energy-level::before {
+            content: attr(data-label);
+            position: absolute;
+            left: -60px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        .state-population {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            right: -10px;
+            top: -8px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .state-population.active {
+            opacity: 1;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .photon {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ff6b6b;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .photon.moving {
+            opacity: 1;
+            animation: photonMove 2s ease-in-out;
+        }
+
+        @keyframes photonMove {
+            0% { transform: translateX(-50px); }
+            50% { transform: translateX(200px) scale(1.3); }
+            100% { transform: translateX(450px); opacity: 0; }
+        }
+
+        .control-panel {
+            flex: 1;
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            border: 1px solid var(--secondary);
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .control-panel h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+            font-weight: 500;
+        }
+
+        .toggle-button {
+            background: var(--secondary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Overpass', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .toggle-button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .toggle-button.active {
+            background: var(--accent);
+            box-shadow: 0 0 20px rgba(62, 193, 201, 0.3);
+        }
+
+        .photon-button {
+            background: #ff6b6b;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Overpass', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .photon-button:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .photon-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-display {
+            background: var(--text-overlay-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .status-display h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .status-display p {
+            color: #ccc;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .operation-mode {
+            background: var(--menu-gradient);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .operation-mode h4 {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .operation-mode p {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .laser-beam {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--accent), transparent);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .laser-beam.active {
+            opacity: 1;
+            animation: laserPulse 1s infinite;
+        }
+
+        @keyframes laserPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>W-System Quantum Computing Demo</h1>
+        <p>Level 1: Understanding how control fields determine quantum gate operations</p>
+    </div>
+
+    <div class="main-container">
+        <div class="atom-visualization">
+            <h3 style="color: var(--accent); margin-bottom: 1rem;">W-Type Atomic System</h3>
+            
+            <div class="laser-beam" id="controlBeam"></div>
+            
+            <div class="energy-diagram">
+                <!-- Excited states -->
+                <div class="energy-level excited" data-label="|er⟩" style="top: 20px;">
+                    <div class="state-population" id="er-pop"></div>
+                </div>
+                <div class="energy-level excited" data-label="|e0⟩" style="top: 50px;">
+                    <div class="state-population" id="e0-pop"></div>
+                </div>
+                <div class="energy-level excited" data-label="|el⟩" style="top: 80px;">
+                    <div class="state-population" id="el-pop"></div>
+                </div>
+                
+                <!-- Ground states -->
+                <div class="energy-level" data-label="|sr⟩" style="top: 200px;">
+                    <div class="state-population active" id="sr-pop"></div>
+                </div>
+                <div class="energy-level" data-label="|sl⟩" style="top: 230px;">
+                    <div class="state-population" id="sl-pop"></div>
+                </div>
+                
+                <!-- Photon -->
+                <div class="photon" id="photon" style="top: 50%; left: 50px;"></div>
+            </div>
+            
+            <div style="text-align: center; color: #ccc; font-size: 0.9rem;">
+                <p>Five-level W-system: 2 ground states + 3 excited states</p>
+                <p>Control field determines which transitions are active</p>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h3>Control Panel</h3>
+            
+            <div class="control-group">
+                <label>Control Field</label>
+                <button class="toggle-button" id="controlToggle">
+                    Control Field OFF
+                </button>
+            </div>
+
+            <div class="control-group">
+                <label>Send Photon</label>
+                <button class="photon-button" id="photonButton">
+                    Send Photon →
+                </button>
+            </div>
+
+            <div class="operation-mode" id="operationMode">
+                <h4>SWAP Mode</h4>
+                <p>Photon and atom can exchange quantum states</p>
+            </div>
+
+            <div class="status-display" id="statusDisplay">
+                <h4>Current State</h4>
+                <p>Atom in |sr⟩ ground state. Control field OFF enables SWAP operations between photonic and atomic qubits.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class WSystemDemo {
+            constructor() {
+                this.controlFieldActive = false;
+                this.atomState = 'sr'; // sr, sl, e0, el, er
+                this.isAnimating = false;
+                
+                this.initializeElements();
+                this.bindEvents();
+                this.updateDisplay();
+            }
+
+            initializeElements() {
+                this.controlToggle = document.getElementById('controlToggle');
+                this.photonButton = document.getElementById('photonButton');
+                this.operationMode = document.getElementById('operationMode');
+                this.statusDisplay = document.getElementById('statusDisplay');
+                this.controlBeam = document.getElementById('controlBeam');
+                this.photon = document.getElementById('photon');
+                
+                // State population indicators
+                this.populations = {
+                    sr: document.getElementById('sr-pop'),
+                    sl: document.getElementById('sl-pop'),
+                    e0: document.getElementById('e0-pop'),
+                    el: document.getElementById('el-pop'),
+                    er: document.getElementById('er-pop')
+                };
+            }
+
+            bindEvents() {
+                this.controlToggle.addEventListener('click', () => {
+                    this.toggleControlField();
+                });
+
+                this.photonButton.addEventListener('click', () => {
+                    this.sendPhoton();
+                });
+            }
+
+            toggleControlField() {
+                this.controlFieldActive = !this.controlFieldActive;
+                this.updateDisplay();
+            }
+
+            sendPhoton() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                this.photonButton.disabled = true;
+                
+                // Animate photon
+                this.photon.classList.add('moving');
+                
+                // Simulate quantum interaction
+                setTimeout(() => {
+                    this.simulatePhotonInteraction();
+                }, 500);
+
+                // Reset after animation
+                setTimeout(() => {
+                    this.photon.classList.remove('moving');
+                    this.isAnimating = false;
+                    this.photonButton.disabled = false;
+                }, 2000);
+            }
+
+            simulatePhotonInteraction() {
+                if (this.controlFieldActive) {
+                    // CZ mode - conditional phase, atom state unchanged
+                    this.updateStatus("CZ Gate: Photon acquired conditional phase. Atom remains in " + this.atomState + " state.");
+                } else {
+                    // SWAP mode - exchange states
+                    if (this.atomState === 'sr') {
+                        this.atomState = 'sl';
+                        this.updateStatus("SWAP Gate: Photon and atom exchanged states. Atom now in |sl⟩ state.");
+                    } else if (this.atomState === 'sl') {
+                        this.atomState = 'sr';
+                        this.updateStatus("SWAP Gate: Photon and atom exchanged states. Atom now in |sr⟩ state.");
+                    }
+                }
+                
+                this.updateAtomStateDisplay();
+            }
+
+            updateAtomStateDisplay() {
+                // Clear all populations
+                Object.values(this.populations).forEach(pop => {
+                    pop.classList.remove('active');
+                });
+                
+                // Show current state
+                if (this.populations[this.atomState]) {
+                    this.populations[this.atomState].classList.add('active');
+                }
+            }
+
+            updateStatus(message) {
+                const statusText = this.statusDisplay.querySelector('p');
+                statusText.textContent = message;
+            }
+
+            updateDisplay() {
+                // Update control toggle button
+                if (this.controlFieldActive) {
+                    this.controlToggle.textContent = 'Control Field ON';
+                    this.controlToggle.classList.add('active');
+                    this.controlBeam.classList.add('active');
+                } else {
+                    this.controlToggle.textContent = 'Control Field OFF';
+                    this.controlToggle.classList.remove('active');
+                    this.controlBeam.classList.remove('active');
+                }
+
+                // Update operation mode
+                const modeTitle = this.operationMode.querySelector('h4');
+                const modeDesc = this.operationMode.querySelector('p');
+                
+                if (this.controlFieldActive) {
+                    modeTitle.textContent = 'CZ Mode';
+                    modeDesc.textContent = 'Control field blocks e0 transitions. Photons acquire conditional phase.';
+                    this.updateStatus("Control field ON: System configured for CZ gate operations. Transitions to |e0⟩ are suppressed.");
+                } else {
+                    modeTitle.textContent = 'SWAP Mode';
+                    modeDesc.textContent = 'All transitions active. Photon and atom can exchange quantum states.';
+                    this.updateStatus("Control field OFF: System configured for SWAP gate operations. All atomic transitions are active.");
+                }
+
+                this.updateAtomStateDisplay();
+            }
+        }
+
+        // Initialize the demo when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new WSystemDemo();
+        });
+    </script>
+</body>
+</html>
