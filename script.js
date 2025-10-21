@@ -26,13 +26,13 @@ const states = {
         ],
         image: "assets/images/state3.webp"
     },
-    5: {
-        title: "Photonic Quantum Computing",
+    4: {
+        title: "Advanced Quantum Processing",
         descriptions: [
-            "this approach utilizes <span class='highlight'>individual photons as qubits,</span>  to carry out quantum operations at room temperature. ", 
-            "By leveraging low-loss waveguides and existing fiber networks, this approach offers scalability and low-decoherence pathways toward large-scale quantum processors."
+            "Our advanced quantum processing unit represents the culmination of cutting-edge quantum technology, integrating seamlessly with the vacuum chamber and optical systems.",
+            "This state-of-the-art component enables <span class='highlight'>complex quantum computations</span> while maintaining the compact form factor that sets our system apart."
         ],
-        image: "assets/images/state5-static.webp"
+        image: "assets/images/state4.webp"
     }
 };
 
@@ -40,12 +40,12 @@ const states = {
 const animations = {
     "1-2": "assets/animations/seq1.webm",
     "2-1": "assets/animations/seq1_reverse.webm",
-    "1-5": "assets/animations/1to5.webm",
-    "5-1": "assets/animations/5to1.webm",
     "2-3": "assets/animations/seq2.webm",
     "3-2": "assets/animations/seq2_reverse.webm",
     "3-1": "assets/animations/seq3.webm",
-    "1-3": "assets/animations/1to3.webm" 
+    "1-3": "assets/animations/seq3_reverse.webm",
+    "3-4": "assets/animations/seq4.webm",
+    "4-3": "assets/animations/seq4_reverse.webm"
 };
 
 // Current state
@@ -304,17 +304,25 @@ async function transitionToState(targetState, isCompoundSegment = false) {
         } 
         // Handle compound transitions
         else {
-            // For 2->5 or 3->5: go through state 1 first
-            if ((currentState === 2 && targetState === 5) || 
-                (currentState === 3 && targetState === 5)) {
-                console.log(`Using compound transition: ${currentState} → 1 → ${targetState}`);
-                await performCompoundTransition(currentState, 1, targetState);
+            // For 4->1: play seq4_reverse followed by seq3_reverse 
+            if (currentState === 4 && targetState === 1) {
+                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
+                await performCompoundTransition(currentState, 3, targetState);
             }
-            // For 5->2 or 5->3: go through state 1 first  
-            else if ((currentState === 5 && targetState === 2) ||
-                     (currentState === 5 && targetState === 3)) {
-                console.log(`Using compound transition: ${currentState} → 1 → ${targetState}`);
-                await performCompoundTransition(currentState, 1, targetState);
+            // For 1->4: go through state 3 first
+            else if (currentState === 1 && targetState === 4) {
+                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
+                await performCompoundTransition(currentState, 3, targetState);
+            }
+            // For 2->4: go through state 3 first
+            else if (currentState === 2 && targetState === 4) {
+                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
+                await performCompoundTransition(currentState, 3, targetState);
+            }
+            // For 4->2: go through state 3 first
+            else if (currentState === 4 && targetState === 2) {
+                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
+                await performCompoundTransition(currentState, 3, targetState);
             }
             else {
                 // Fallback to instant transition
@@ -430,6 +438,13 @@ async function performCompoundTransition(fromState, intermediateState, toState) 
         } else {
             await instantTransition(toState, true);
             console.log(`Second leg complete (instant): ${intermediateState} → ${toState}`);
+        }
+        
+        // Ensure final state image and content are set correctly
+        const finalState = states[toState];
+        if (finalState && finalState.image) {
+            stateVisual.src = finalState.image;
+            updateContent(toState);
         }
         
         console.log(`Compound transition complete: ${fromState} → ${intermediateState} → ${toState}`);
@@ -673,8 +688,8 @@ function setupBackgroundClickNavigation() {
                 const nextState = {
                     1: 2,
                     2: 3,
-                    3: 1,
-                    5: 1
+                    3: 4,
+                    4: 1
                 };
                 
                 // Get the next state based on current state
@@ -700,8 +715,8 @@ function setupBackgroundClickNavigation() {
 
 /* 
  * Transition Logic Summary:
- * Direct transitions: 1↔2, 1↔5, 2↔3, 3→1, 1→3
+ * Direct transitions: 1↔2, 2↔3, 3↔4, 3→1, 1→3
  * Compound transitions:
- * - 2→5, 3→5: go through state 1 first
- * - 5→2, 5→3: go through state 1 first
+ * - 1→4, 2→4: go through state 3 first
+ * - 4→1, 4→2: go through state 3 first
  */
