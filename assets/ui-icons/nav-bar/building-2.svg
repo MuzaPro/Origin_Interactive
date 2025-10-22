@@ -28,36 +28,32 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="34.625"
-     inkscape:cx="12"
-     inkscape:cy="12"
+     inkscape:zoom="17.3125"
+     inkscape:cx="3.2635379"
+     inkscape:cy="14.122744"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
-     inkscape:window-x="-8"
-     inkscape:window-y="44"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg7" />
   <path
-     d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"
+     d="M 10,22 V 4 a 2,2 0 0 1 2,-2 h 8 a 2,2 0 0 1 2,2 v 18 z"
      id="path1" />
   <path
-     d="M 8.4259928,1.9783394 4,1.9783394 c -1.1045695,0 -2,0.8954305 -2,2 V 20 c 0,1.104569 0.8954305,2 2,2 h 2"
+     d="M 7.0397112,1.9783394 H 4 c -1.1045695,0 -2,0.8954305 -2,2 V 20 c 0,1.104569 0.8954305,2 2,2 h 5.8122744"
      id="path2"
      sodipodi:nodetypes="cssssc" />
   <path
-     d="m 16.209386,2.0108303 h 3.64621 c 1.104569,0 1.990025,0.8954756 2,2 L 22,20 c 0.01,1.104524 -0.895431,2 -2,2 h -2"
-     id="path3"
-     sodipodi:nodetypes="cssssc" />
-  <path
-     d="M10 6h4"
+     d="m 14,6 h 4"
      id="path4" />
   <path
-     d="M10 10h4"
+     d="m 14,10 h 4"
      id="path5" />
   <path
-     d="M10 14h4"
+     d="m 14,14 h 4"
      id="path6" />
   <path
-     d="M10 18h4"
+     d="m 14,18 h 4"
      id="path7" />
 </svg>
