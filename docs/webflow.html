@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Source Interactive Demo - Webflow Integration Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Additional styles specific to this guide */
+        .integration-option {
+            margin-bottom: 3rem;
+        }
+        
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .option-badge {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 2px solid var(--border-primary);
+        }
+        
+        .step-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-secondary);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 3.5rem;
+        }
+        
+        .step-number {
+            position: absolute;
+            left: 1rem;
+            top: 1.5rem;
+            width: 30px;
+            height: 30px;
+            background: var(--border-primary);
+            color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .checklist li:before {
+            content: "□";
+            position: absolute;
+            left: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+        
+        .timeline-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+        }
+        
+        .resource-link {
+            color: var(--text-primary);
+            text-decoration: underline;
+            text-decoration-color: var(--border-secondary);
+            transition: all 0.2s ease;
+        }
+        
+        .resource-link:hover {
+            text-decoration-color: var(--border-primary);
+        }
+        
+        .warning-box {
+            background: var(--accent);
+            color: white;
+            padding: 1.5rem;
+            border: 3px solid var(--border-primary);
+            margin: 2rem 0;
+        }
+        
+        .warning-box h5 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+        }
+        
+        .hosting-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="mesh-background" id="meshCanvas"></canvas>
+    <button class="theme-toggle" id="themeToggle">◐ DARK</button>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>Webflow Integration Guide</h1>
+                    <p>Quantum Source Interactive Demo</p>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-pills">
+            <a href="#overview" class="nav-pill">Overview</a>
+            <a href="#requirements" class="nav-pill">Requirements</a>
+            <a href="#integration" class="nav-pill">Integration</a>
+            <a href="#technical" class="nav-pill">Implementation</a>
+            <a href="#troubleshooting" class="nav-pill">Troubleshooting</a>
+        </nav>
+
+        <div class="intro" id="overview">
+            <h2>Integration Overview</h2>
+            <p>
+                An <span class="highlight">interactive, cinematic experience</span> for exploring Quantum Source's photonic quantum computing laboratory. 
+                This guide provides two implementation approaches for integrating the demo into your Webflow site.
+            </p>
+        </div>
+
+        <section class="section" id="requirements">
+            <h2 class="section-title">Requirements</h2>
+            <p class="section-subtitle">Prerequisites for integration</p>
+
+            <div class="component-grid">
+                <div class="example-card">
+                    <div class="card-number">01</div>
+                    <div class="card-content">
+                        <h3 class="card-title">Webflow Setup</h3>
+                        <ul class="checklist">
+                            <li>Webflow Business plan or higher</li>
+                            <li>Designer access with publishing permissions</li>
+                            <li>Custom code capabilities enabled</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="card-number">02</div>
+                    <div class="card-content">
+                        <h3 class="card-title">Implementation Time</h3>
+                        <div class="timeline-item">
+                            <span>Asset hosting setup</span>
+                            <span>1-2 hours</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span>Webflow integration</span>
+                            <span>2-4 hours</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span>Testing & optimization</span>
+                            <span>1 hour</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="integration">
+            <h2 class="section-title">Integration Approach Options</h2>
+            <p class="section-subtitle">Choose your implementation path</p>
+
+            <div class="integration-option">
+                <div class="option-header">
+                    <h3>Option 1: Full Page Integration</h3>
+                    <span class="option-badge">Recommended</span>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-subtitle">
+                            <strong>Best for:</strong> Seamless user experience that maintains the demo's responsive design
+                        </p>
+                        <p class="project-subtitle">
+                            <strong>Implementation:</strong> The demo becomes a dedicated page on your Webflow site, preserving all responsive breakpoints and mobile optimizations built into the application.
+                        </p>
+                        <div class="project-meta">
+                            <div>
+                                <p><strong>Advantages:</strong></p>
+                                <ul style="margin-top: 0.5rem; color: var(--text-secondary);">
+                                    <li>Maintains full responsive functionality</li>
+                                    <li>Professional, integrated experience</li>
+                                    <li>Better for SEO and analytics</li>
+                                    <li>Preserves all interactive features</li>
+                                </ul>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="status">4-6 HOURS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-option">
+                <div class="option-header">
+                    <h3>Option 2: Iframe Embed</h3>
+                    <span class="option-badge" style="background: var(--text-muted);">Quick Deploy</span>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-subtitle">
+                            <strong>Best for:</strong> Rapid deployment with minimal technical complexity
+                        </p>
+                        <p class="project-subtitle">
+                            <strong>Implementation:</strong> Host the complete demo externally and embed it within your Webflow site using an iframe.
+                        </p>
+                        <div class="project-meta">
+                            <div>
+                                <p><strong>Advantages:</strong></p>
+                                <ul style="margin-top: 0.5rem; color: var(--text-secondary);">
+                                    <li>Fast implementation</li>
+                                    <li>No code modifications needed</li>
+                                    <li>Zero risk to existing website</li>
+                                </ul>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="status">1-2 HOURS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="text-align: center; padding: 4rem 0;">
+          <div style="max-width: 700px; margin: 0 auto;">
+              <div style="font-size: 3rem; margin-bottom: 1.5rem; color: var(--text-primary);">
+                  <i class="fab fa-github"></i>
+              </div>
+              <h3 style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem;">
+                  Ready to Begin?
+              </h3>
+              <p style="font-size: 1.2rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 2rem;">
+                  Access the complete Interactive Demo codebase and all associated assets from our GitHub repository. 
+                  Everything you need for either integration approach is included.
+              </p>
+              <div style="background: var(--bg-secondary); border: 3px solid var(--border-primary); padding: 2rem; margin-bottom: 2rem; position: relative;">
+                  <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                      <i class="fab fa-github" style="font-size: 1rem; margin-right: 0.5rem;"></i>REPOSITORY INCLUDES:
+                  </p>
+                  <p style="font-size: 1rem; color: var(--text-primary);">
+                      Complete source code • Visual assets • Audio files • Technical documentation • README with detailed instructions
+                  </p>
+              </div>
+              <a href="https://github.com/MuzaPro/Origin_Interactive" target="_blank" class="btn-cta" style="font-size: 1rem; padding: 1.2rem 2.5rem;">
+                  <i class="fab fa-github" style="margin-right: 0.75rem;"></i>ACCESS GITHUB REPOSITORY →
+              </a>
+          </div>
+        </section>
+
+        <section class="benefits">
+            <div class="container">
+                <div class="benefits-content">
+                    <h2 class="section-title">Step-by-Step Integration Process</h2>
+                    <p class="section-subtitle">Follow these phases for successful implementation</p>
+
+                    <h3 style="margin-bottom: 2rem;">Phase 1: Asset Preparation and Hosting</h3>
+                    
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+                        Since Webflow has file size limitations that won't accommodate the demo's video content, you'll need external hosting for assets.
+                    </p>
+
+                    <div class="hosting-options">
+                        <div class="benefit-item">
+                            <div class="benefit-number">01</div>
+                            <div class="benefit-content">
+                                <h4>Netlify</h4>
+                                <p class="card-description">Free, beginner-friendly option</p>
+                                <div class="step-card">
+                                    <div class="step-number">1</div>
+                                    <p>Create account at netlify.com</p>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">2</div>
+                                    <p>Download the complete demo from GitHub</p>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">3</div>
+                                    <p>Drag and drop the entire project folder to Netlify</p>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">4</div>
+                                    <p>Note the provided URL for later use</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-number">02</div>
+                            <div class="benefit-content">
+                                <h4>Cloudinary</h4>
+                                <p class="card-description">Better performance, free tier available</p>
+                                <div class="step-card">
+                                    <div class="step-number">1</div>
+                                    <p>Sign up at cloudinary.com</p>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">2</div>
+                                    <p>Upload the assets folder through their interface</p>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">3</div>
+                                    <p>Copy the optimized URLs for each file</p>
+                                </div>
+                                <div class="step-card">
+                                    <div class="step-number">4</div>
+                                    <p>Update file paths in the demo code</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 4rem; margin-bottom: 2rem;">Phase 2: Webflow Implementation</h3>
+
+                    <div class="warning-box">
+                        <h5>⚠ Critical Responsive Consideration</h5>
+                        <p>The demo uses sophisticated aspect-ratio media queries to optimize layouts across devices. Standard Webflow custom code embeds may interfere with these responsive features. Use a full-height Custom Code component that doesn't constrain the demo's responsive behavior.</p>
+                    </div>
+
+                    <h4 style="margin-top: 3rem; margin-bottom: 1.5rem;">For Option 1: Full Page Integration</h4>
+                    
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h5 style="margin-bottom: 0.5rem;">Create Demo Page</h5>
+                        <p>In Webflow Designer, create a new page (e.g., "interactive-lab-tour"). Set to full width layout, remove header/footer for immersive experience, configure SEO settings appropriately.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h5 style="margin-bottom: 0.5rem;">Add Custom Code Component</h5>
+                        <p>Add a Custom Code component set to 100% width and height. Insert the complete demo HTML structure. Update all asset URLs to point to your hosted files.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h5 style="margin-bottom: 0.5rem;">Test Responsive Behavior</h5>
+                        <p>Test responsive behavior across device sizes in Webflow's preview mode.</p>
+                    </div>
+
+                    <h4 style="margin-top: 3rem; margin-bottom: 1.5rem;">For Option 2: Iframe Embed</h4>
+
+                    <div class="code-block" style="margin-bottom: 2rem;">
+&lt;iframe 
+    src="YOUR-DEMO-URL-HERE" 
+    width="100%" 
+    height="100vh" 
+    frameborder="0"
+    style="min-height: 600px;"
+    allow="autoplay; fullscreen"&gt;
+&lt;/iframe&gt;
+                    </div>
+
+                    <h3 style="margin-top: 4rem; margin-bottom: 2rem;">Phase 3: Testing and Optimization</h3>
+
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-number">✓</div>
+                            <div class="benefit-content">
+                                <h4>Device Testing Protocol</h4>
+                                <ul class="checklist">
+                                    <li>Desktop browsers (Chrome, Safari, Firefox)</li>
+                                    <li>Tablet (both orientations)</li>
+                                    <li>Mobile devices (iOS and Android)</li>
+                                    <li>Various screen resolutions</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-number">✓</div>
+                            <div class="benefit-content">
+                                <h4>Functionality Verification</h4>
+                                <ul class="checklist">
+                                    <li>All navigation transitions work smoothly</li>
+                                    <li>Audio effects function properly</li>
+                                    <li>Text remains readable on all devices</li>
+                                    <li>Loading performance is acceptable</li>
+                                    <li>Mobile touch interactions respond correctly</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="benefit-item">
+                            <div class="benefit-number">✓</div>
+                            <div class="benefit-content">
+                                <h4>Integration Testing</h4>
+                                <ul class="checklist">
+                                    <li>Navigation back to main website works</li>
+                                    <li>Demo fits properly within site design</li>
+                                    <li>No conflicts with existing Webflow styles</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="technical">
+            <h2 class="section-title">Technical Implementation</h2>
+            <p class="section-subtitle">Key considerations and resources</p>
+
+            <div class="intro" style="margin-bottom: 3rem;">
+                <h3>Essential Resources</h3>
+                <p><strong>Complete Demo Code:</strong> <a href="https://github.com/MuzaPro/Origin_Interactive" class="resource-link" target="_blank">github.com/MuzaPro/Origin_Interactive</a></p>
+                <p><strong>Asset Hosting:</strong> <a href="https://netlify.com" class="resource-link" target="_blank">Netlify</a> (free) or <a href="https://cloudinary.com" class="resource-link" target="_blank">Cloudinary</a> (optimized)</p>
+                <p><strong>Webflow Documentation:</strong> <a href="https://webflow.com/university" class="resource-link" target="_blank">Custom Code Guide</a></p>
+            </div>
+
+            <div class="component-grid">
+                <div class="example-card">
+                    <div class="card-number">⚡</div>
+                    <div class="card-content">
+                        <h3 class="card-title">Responsive Design</h3>
+                        <p class="card-description">
+                            The demo includes sophisticated responsive breakpoints:
+                        </p>
+                        <ul style="margin-top: 1rem; color: var(--text-secondary);">
+                            <li><strong>Portrait orientation:</strong> Vertical layout</li>
+                            <li><strong>Wide landscape:</strong> Three-column layout</li>
+                            <li><strong>Narrow landscape:</strong> Optimized hybrid layout</li>
+                        </ul>
+                        <p class="card-description" style="margin-top: 1rem;">
+                            Avoid CSS conflicts or constrained containers to maintain functionality.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="card-number">🚀</div>
+                    <div class="card-content">
+                        <h3 class="card-title">Performance & Compatibility</h3>
+                        <ul class="checklist">
+                            <li>Preloaded assets for smooth transitions</li>
+                            <li>WebP images and WebM videos optimized</li>
+                            <li>Chrome 70+, Firefox 65+, Safari 12+, Edge 79+</li>
+                            <li>Full mobile Safari and Chrome Android support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+
+        <section class="section" id="troubleshooting">
+            <h2 class="section-title">Common Integration Challenges</h2>
+            <p class="section-subtitle">Solutions to frequent issues</p>
+
+            <div style="margin-bottom: 3rem;">
+                <div class="project-card">
+                    <div class="project-content">
+                        <h4>"Responsive layout breaks in Webflow"</h4>
+                        <p class="project-subtitle">
+                            <strong>Likely cause:</strong> Webflow container styles interfering with demo's CSS<br>
+                            <strong>Solution:</strong> Use minimal container styling and test in Webflow's preview mode
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 3rem;">
+                <div class="project-card">
+                    <div class="project-content">
+                        <h4>"Videos don't load or play"</h4>
+                        <p class="project-subtitle">
+                            <strong>Likely cause:</strong> File hosting issues or path errors<br>
+                            <strong>Solution:</strong> Verify all video URLs are accessible and use proper file formats
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div style="margin-bottom: 3rem;">
+                <div class="project-card">
+                    <div class="project-content">
+                        <h4>"Mobile interactions don't work properly"</h4>
+                        <p class="project-subtitle">
+                            <strong>Likely cause:</strong> Touch event conflicts<br>
+                            <strong>Solution:</strong> Ensure demo is not constrained by Webflow touch handlers
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="philosophy">
+            <div class="philosophy-content">
+                <h3>Quality Assurance Checklist</h3>
+                <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 3rem;">
+                    Complete this checklist to ensure professional implementation
+                </p>
+                
+                <div style="max-width: 600px; margin: 0 auto; text-align: left;">
+                    <h4 style="margin-bottom: 1.5rem;">Technical Functionality</h4>
+                    <ul class="checklist" style="margin-bottom: 3rem;">
+                        <li>All state transitions work correctly</li>
+                        <li>Audio feedback functions (but isn't disruptive)</li>
+                        <li>Mobile touch interactions are responsive</li>
+                        <li>Loading times are acceptable (under 5 seconds)</li>
+                        <li>Cross-browser compatibility verified</li>
+                    </ul>
+
+                    <h4 style="margin-bottom: 1.5rem;">User Experience</h4>
+                    <ul class="checklist" style="margin-bottom: 3rem;">
+                        <li>Demo fits naturally within website design</li>
+                        <li>Clear navigation path back to main site</li>
+                        <li>Text is readable on all device sizes</li>
+                        <li>Visual quality maintained across platforms</li>
+                    </ul>
+
+                    <h4 style="margin-bottom: 1.5rem;">Business Objectives</h4>
+                    <ul class="checklist">
+                        <li>Demo supports Quantum Source's technology narrative</li>
+                        <li>Integration aligns with overall website messaging</li>
+                        <li>Contact points or next steps are accessible from demo</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Dark mode functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', currentTheme);
+        
+        // Update button text based on current theme
+        function updateToggleText() {
+            if (body.getAttribute('data-theme') === 'dark') {
+                themeToggle.textContent = '◐ LIGHT';
+            } else {
+                themeToggle.textContent = '◐ DARK';
+            }
+        }
+        
+        // Initialize button text
+        updateToggleText();
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateToggleText();
+        });
+
+        // Animated mesh background
+        const canvas = document.getElementById('meshCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Mesh animation
+        const points = [];
+        const numPoints = 50;
+        
+        for (let i = 0; i < numPoints; i++) {
+            points.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            });
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Get current theme color
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            const strokeColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 1;
+            
+            // Update points
+            points.forEach(point => {
+                point.x += point.vx;
+                point.y += point.vy;
+                
+                if (point.x < 0 || point.x > canvas.width) point.vx *= -1;
+                if (point.y < 0 || point.y > canvas.height) point.vy *= -1;
+            });
+            
+            // Draw connections
+            for (let i = 0; i < points.length; i++) {
+                for (let j = i + 1; j < points.length; j++) {
+                    const dx = points[i].x - points[j].x;
+                    const dy = points[i].y - points[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(points[i].x, points[i].y);
+                        ctx.lineTo(points[j].x, points[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
