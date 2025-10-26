@@ -1,8 +1,8 @@
-# Quantum Source Interactive Experience
+# Origin Interactive Experience
 
 An interactive web application showcasing Quantum Source's revolutionary photonic quantum computing technology through an immersive visual experience.
 
-![Quantum Source Interactive Experience](assets/images/screenshot.jpg)
+![Origin Interactive Experience](assets/images/state1.webp)
 
 ## 🚀 Project Overview
 
@@ -26,29 +26,43 @@ This is a state-driven web application that simulates exploring a quantum comput
 ## 📁 Project Structure
 
 ```
-quantum-source-interactive/
+origin-interactive/
 ├── index.html              # Main HTML structure
 ├── style.css               # All styling and responsive layouts
 ├── script.js               # State machine and interaction logic
 ├── README.md               # This file
+├── vercel.json             # Deployment configuration
 ├── assets/
 │   ├── images/            # Static state images (WebP format)
-│   │   ├── state1-static.webp
-│   │   ├── state2-static.webp
-│   │   ├── state3-static.webp
-│   │   └── state5-static.webp
+│   │   ├── state1.webp
+│   │   ├── state2.webp
+│   │   ├── state3.webp
+│   │   ├── state4.webp
+│   │   └── qr.png
 │   ├── animations/        # Transition videos (WebM format)
-│   │   ├── 1to2.webm
-│   │   ├── 1to5.webm
-│   │   ├── 2to1.webm
-│   │   ├── 2to3.webm
-│   │   ├── 3to1.webm
-│   │   └── 3to2.webm
+│   │   ├── seq1.webm
+│   │   ├── seq1_reverse.webm
+│   │   ├── seq2.webm
+│   │   ├── seq2_reverse.webm
+│   │   ├── seq3.webm
+│   │   ├── seq3_reverse.webm
+│   │   ├── seq4.webm
+│   │   └── seq4_reverse.webm
 │   ├── sound/            # Audio effects
 │   │   └── buttonSFX.wav
-│   └── ui-icons/         # Navigation icons
-│       └── nav-bar/
-│           └── building-2.svg
+│   ├── ui-icons/         # Navigation and interface icons
+│   │   ├── nav-bar/
+│   │   │   ├── building-2.svg
+│   │   │   ├── cavity-QED2.svg
+│   │   │   ├── cog.svg
+│   │   │   ├── cpu.svg
+│   │   │   ├── house.svg
+│   │   │   └── monitor-cog.svg
+│   │   └── [various UI icons].svg
+│   └── brand/            # Branding assets
+└── docs/                 # Documentation
+    ├── webflow.html      # Webflow integration guide
+    └── style.css         # Documentation styling
 ```
 
 ## 🎯 How It Works
@@ -62,7 +76,7 @@ const states = {
     1: { // Overview state
         title: "Introduction to Modestly Sized Quantum Computers",
         descriptions: [...],
-        image: "assets/images/state1-static.webp"
+        image: "assets/images/state1.webp"
     },
     2: { // System state
         // ...
@@ -74,8 +88,8 @@ const states = {
 ### Transitions
 
 Transitions between states use pre-rendered video animations:
-- **Direct transitions**: Play specific animation (e.g., `1to2.webm`)
-- **Compound transitions**: Route through intermediate state if no direct path exists
+- **Sequential animations**: Use `seq1.webm`, `seq2.webm`, etc. for forward transitions
+- **Reverse animations**: Use `seq1_reverse.webm`, `seq2_reverse.webm`, etc. for backward transitions
 - **Fallback**: Instant image swap if animation unavailable
 
 ### Responsive Layouts
@@ -106,27 +120,27 @@ The app uses **aspect ratio** to determine the optimal layout:
 ```javascript
 const states = {
     // ... existing states
-    4: {
+    5: {
         title: "New State Title",
         descriptions: [
             "First paragraph",
             "Second paragraph with <span class='highlight'>highlights</span>"
         ],
-        image: "assets/images/state4-static.webp"
+        image: "assets/images/state5.webp"
     }
 };
 ```
 
 2. **Add required assets**:
-   - Static image: `assets/images/state4-static.webp`
-   - Transition animations: `XtoY.webm` for each connected state
+   - Static image: `assets/images/state5.webp`
+   - Transition animations: `seq5.webm` and `seq5_reverse.webm`
 
 3. **Update animations mapping**:
 ```javascript
 const animations = {
     // ... existing animations
-    "3-4": "assets/animations/3to4.webm",
-    "4-3": "assets/animations/4to3.webm"
+    "seq5": "assets/animations/seq5.webm",
+    "seq5_reverse": "assets/animations/seq5_reverse.webm"
 };
 ```
 
@@ -152,7 +166,7 @@ All responsive breakpoints are in `style.css` using aspect-ratio media queries:
 - **Images**: WebP format, 1920x1080 recommended
 - **Videos**: WebM with VP9 codec, 2-3 second duration
 - **Audio**: WAV or MP3, under 100KB
-- **File naming**: Use consistent `XtoY` pattern for transitions
+- **File naming**: Use consistent `seqX.webm` and `seqX_reverse.webm` pattern for transitions
 
 ## 🚀 Deployment
 
