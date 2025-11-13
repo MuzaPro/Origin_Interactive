@@ -1,4 +1,4 @@
-/* CSS Variables v13 - Modern Elegant Design with Glass Morphism */
+/* CSS Variables v13 - Fixed Mobile Layouts with Performance Optimizations */
 :root {
     --secondary-bg: #0F282D;
     --main-bg: #183948;
@@ -7,10 +7,6 @@
     --accent: #3EC1C9;
     --text-overlay-bg: rgba(15, 40, 45, 0.8);
     --menu-gradient: linear-gradient(90deg, #0F282D 0%, rgba(15, 40, 45, 0.8) 100%);
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(62, 193, 201, 0.1);
-    --glass-hover: rgba(62, 193, 201, 0.08);
-    --glass-active: linear-gradient(135deg, rgba(62, 193, 201, 0.2), rgba(22, 100, 112, 0.15));
 }
 
 /* CSS Reset */
@@ -93,10 +89,7 @@ html, body {
     left: 0;
     width: 25vw;
     height: 100vh;
-    background: rgba(15, 40, 45, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(62, 193, 201, 0.15);
+    background: var(--menu-gradient);
     z-index: 10;
     display: flex;
     flex-direction: column;
@@ -104,139 +97,86 @@ html, body {
 
 /* Desktop Navigation Menu */
 .nav-menu {
-    background: rgba(9, 24, 31, 0.3);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    padding: 2rem 1.5rem;
-    border-bottom: 1px solid rgba(62, 193, 201, 0.1);
-    border-radius: 0 0 24px 24px;
-    margin: 0.5rem;
+    background: var(--menu-bar);
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(62, 193, 201, 0.2);
 }
 
 .nav-item {
     display: flex;
     align-items: center;
-    padding: 0.8rem 1.5rem;
-    margin: 0.3rem 0;
-    color: rgba(255, 255, 255, 0.85);
+    padding: 1rem 2rem;
+    color: white;
     text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: background-color 0.1s ease, padding-left 0.15s ease, transform 0.05s ease;
     border: none;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 20px;
+    background: none;
     width: 100%;
     cursor: pointer;
     font-family: inherit;
     position: relative;
     overflow: hidden;
     transform: scale(1);
-    border: 1px solid rgba(62, 193, 201, 0.1);
 }
 
 /* Immediate press feedback */
 .nav-item:active {
-    transform: scale(0.98);
-    transition: transform 0.1s ease;
+    transform: scale(0.97);
+    transition: transform 0.05s ease;
 }
 
-/* Modern hover effect with pill expansion */
+/* Ripple effect for immediate feedback */
 .nav-item::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(62, 193, 201, 0.15), rgba(22, 100, 112, 0.15));
-    border-radius: 20px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.nav-item.ripple::before {
+    width: 300px;
+    height: 300px;
 }
 
 .nav-item:hover {
-    background: rgba(62, 193, 201, 0.08);
-    border-color: rgba(62, 193, 201, 0.3);
-    color: white;
-    transform: translateX(8px) scale(1.02);
-    box-shadow: 
-        0 4px 20px rgba(62, 193, 201, 0.1),
-        0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.nav-item:hover::before {
-    opacity: 1;
+    background: rgba(62, 193, 201, 0.1);
+    padding-left: 2.5rem;
 }
 
 .nav-item.active {
-    background: linear-gradient(135deg, rgba(62, 193, 201, 0.2), rgba(22, 100, 112, 0.15));
-    border-color: rgba(62, 193, 201, 0.4);
-    color: white;
-    box-shadow: 
-        0 6px 25px rgba(62, 193, 201, 0.15),
-        0 3px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transform: translateX(4px);
-}
-
-/* Add subtle glow animation for active state */
-@keyframes subtle-glow {
-    0%, 100% { box-shadow: 0 6px 25px rgba(62, 193, 201, 0.15), 0 3px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
-    50% { box-shadow: 0 6px 30px rgba(62, 193, 201, 0.2), 0 3px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
-}
-
-.nav-item.active {
-    background: linear-gradient(135deg, rgba(62, 193, 201, 0.2), rgba(22, 100, 112, 0.15));
-    border-color: rgba(62, 193, 201, 0.4);
-    color: white;
-    animation: subtle-glow 3s ease-in-out infinite;
-    transform: translateX(4px);
+    background: rgba(62, 193, 201, 0.2);
+    border-right: 3px solid var(--accent);
 }
 
 .nav-icon {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     margin-right: 1rem;
     fill: currentColor;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
 }
 
 .nav-icon[src$=".svg"] {
     filter: brightness(0) invert(1);
 }
 
-.nav-item:hover .nav-icon {
-    transform: scale(1.1);
-}
-
-.nav-item.active .nav-icon {
-    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(62, 193, 201, 0.6));
-}
-
 .nav-text {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    position: relative;
-    z-index: 1;
-    letter-spacing: 0.3px;
 }
 
 /* Desktop Content Area */
 .content-area {
     flex: 1;
     padding: 3rem 2rem;
-    background: rgba(15, 40, 45, 0.6);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: var(--text-overlay-bg);
     overflow-y: auto;
-    transition: opacity 0.3s ease;
-    margin: 1rem;
-    border-radius: 24px;
-    border: 1px solid rgba(62, 193, 201, 0.1);
+    transition: opacity 0.2s ease;
 }
 
 .content-area.fade-out {
@@ -314,37 +254,28 @@ html, body {
         top: 0;
         left: 0;
         width: 100vw;
-        height: 85px;
-        background: rgba(9, 24, 31, 0.8);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        height: 60px;
+        background: var(--menu-bar);
         z-index: 20;
         align-items: center;
         justify-content: space-around;
-        border-bottom: 1px solid rgba(62, 193, 201, 0.15);
-        padding: 0.8rem 1rem;
+        border-bottom: 1px solid rgba(62, 193, 201, 0.2);
     }
     
     .mobile-nav-bar .nav-item {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 0.8rem 0.6rem;
-        color: rgba(255, 255, 255, 0.8);
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(62, 193, 201, 0.1);
-        border-radius: 18px;
+        padding: 0.5rem;
+        color: white;
+        background: none;
+        border: none;
         cursor: pointer;
         font-family: inherit;
-        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transition: all 0.1s ease;
         flex: 1;
-        gap: 0.4rem;
-        margin: 0 0.25rem;
-        max-width: 75px;
-        height: 65px;
-        justify-content: center;
+        gap: 0.25rem;
+        margin-right: 0;
     }
     
     .mobile-nav-bar .nav-item:active {
@@ -352,50 +283,29 @@ html, body {
     }
     
     .mobile-nav-bar .nav-item:hover {
-        background: rgba(62, 193, 201, 0.08);
-        border-color: rgba(62, 193, 201, 0.25);
-        color: white;
-        transform: scale(1.05);
+        background: rgba(62, 193, 201, 0.1);
     }
     
     .mobile-nav-bar .nav-item.active {
-        background: linear-gradient(135deg, rgba(62, 193, 201, 0.15), rgba(22, 100, 112, 0.1));
-        border-color: rgba(62, 193, 201, 0.3);
-        color: white;
-        box-shadow: 
-            0 4px 15px rgba(62, 193, 201, 0.1),
-            0 2px 8px rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transform: scale(1.02);
+        background: rgba(62, 193, 201, 0.2);
+        border-bottom: 2px solid var(--accent);
+        border-right: none;
     }
     
     .mobile-nav-bar .nav-icon {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         fill: currentColor;
         margin-right: 0;
-        transition: all 0.3s ease;
-        flex-shrink: 0;
     }
     
     .mobile-nav-bar .nav-icon[src$=".svg"] {
         filter: brightness(0) invert(1);
     }
     
-    .mobile-nav-bar .nav-item:hover .nav-icon {
-        transform: scale(1.1);
-    }
-    
-    .mobile-nav-bar .nav-item.active .nav-icon {
-        filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(62, 193, 201, 0.5));
-    }
-    
     .mobile-nav-bar .nav-text {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 500;
-        letter-spacing: 0.2px;
-        flex-shrink: 0;
-        text-align: center;
     }
     
     /* Mobile content strip styling */
@@ -406,19 +316,12 @@ html, body {
         left: 0;
         right: 0;
         width: 100vw;
-        background: rgba(15, 40, 45, 0.85);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: var(--text-overlay-bg);
         z-index: 15;
-        padding: 2rem 1.5rem;
+        padding: 1.25rem;
         overflow-y: auto;
-        transition: opacity 0.3s ease;
-        box-shadow: 
-            0 -4px 25px rgba(0, 0, 0, 0.3),
-            0 -1px 0 rgba(62, 193, 201, 0.1);
-        border-radius: 0 0 28px 28px;
-        border-top: 1px solid rgba(62, 193, 201, 0.15);
-        min-height: 200px;
+        transition: opacity 0.2s ease;
+        box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.4);
     }
     
     .mobile-content-strip.fade-out {
@@ -426,17 +329,17 @@ html, body {
     }
     
     .mobile-content-strip .main-title {
-        font-size: 1.4rem;
-        margin-bottom: 1rem;
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
         line-height: 1.2;
         color: white !important;
         font-weight: 700;
     }
     
     .mobile-content-strip .description {
-        font-size: 1rem;
-        line-height: 1.6;
-        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
         color: rgba(255, 255, 255, 0.9) !important;
     }
     
@@ -450,12 +353,12 @@ html, body {
     /* Background container fills viewport */
     .background-container {
         position: fixed;
-        top: 85px;
+        top: 60px;
         left: 0;
         right: 0;
         bottom: 0;
         width: 100vw;
-        height: calc(100vh - 85px);
+        height: calc(100vh - 60px);
         z-index: 1;
     }
     
@@ -504,49 +407,35 @@ html, body {
         position: fixed;
         top: 0;
         left: 0;
-        width: 14vw;
-        min-width: 90px;
+        width: 12vw;
+        min-width: 80px;
         height: 100vh;
-        background: rgba(9, 24, 31, 0.6);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: var(--menu-bar);
         z-index: 10;
         flex-direction: column;
-        border-right: 1px solid rgba(62, 193, 201, 0.15);
-        padding: 1rem 0.5rem;
+        border-right: 1px solid rgba(62, 193, 201, 0.2);
     }
     
     .sidebar .nav-menu {
         padding: 1rem 0;
         border-bottom: none;
         background: transparent;
-        border-radius: 16px;
-        margin: 0;
     }
     
     .sidebar .nav-item {
         flex-direction: column;
-        padding: 0.8rem 0.5rem;
+        padding: 0.75rem 0.5rem;
         text-align: center;
-        margin: 0.3rem 0;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(62, 193, 201, 0.08);
+        margin-right: 0;
     }
     
     .sidebar .nav-item:hover {
-        padding: 0.8rem 0.5rem;
-        transform: scale(1.05);
-        background: rgba(62, 193, 201, 0.08);
-        border-color: rgba(62, 193, 201, 0.2);
+        padding-left: 0.5rem;
     }
     
     .sidebar .nav-item.active {
-        border: 1px solid rgba(62, 193, 201, 0.3);
-        background: linear-gradient(135deg, rgba(62, 193, 201, 0.15), rgba(22, 100, 112, 0.1));
-        box-shadow: 
-            0 4px 15px rgba(62, 193, 201, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        border-right: none;
+        border-left: 3px solid var(--accent);
     }
     
     .sidebar .nav-icon {
@@ -571,18 +460,13 @@ html, body {
         display: block !important;
         position: fixed;
         top: 0;
-        left: 14vw;
-        width: 36vw;
+        left: 12vw;
+        width: 35vw;
         height: 100vh;
         padding: 2rem 1.5rem;
         overflow-y: auto;
-        background: rgba(15, 40, 45, 0.6);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        background: var(--text-overlay-bg);
         z-index: 5;
-        margin: 1rem;
-        border-radius: 24px;
-        border: 1px solid rgba(62, 193, 201, 0.1);
     }
     
     .content-area .main-title {
@@ -598,11 +482,11 @@ html, body {
     /* Background on right side for landscape */
     .background-container {
         position: fixed;
-        left: 52vw;
+        left: 47vw;
         right: 0;
         top: 0;
         height: 100vh;
-        width: 48vw;
+        width: 53vw;
         z-index: 1;
         display: block;
     }
@@ -622,49 +506,39 @@ html, body {
 /* Small devices portrait adjustments */
 @media (max-width: 480px) and (min-height: 740px) {
     .mobile-nav-bar {
-        height: 80px;
-        padding: 0.6rem 0.8rem;
-    }
-    
-    .mobile-nav-bar .nav-item {
-        height: 60px;
-        padding: 0.7rem 0.5rem;
-        max-width: 70px;
+        height: 50px;
     }
     
     .mobile-nav-bar .nav-icon {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
     }
     
     .mobile-nav-bar .nav-text {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
     
     .background-container {
-        top: 80px;
-        height: calc(100vh - 80px);
+        top: 50px;
+        height: calc(100vh - 50px);
     }
     
     .state-visual,
     .state-animation {
-        max-height: calc(100vh - 80px - 200px); /* Adjusted for smaller nav */
+        max-height: calc(100vh - 50px - 180px); /* Adjusted for smaller nav */
     }
     
     .mobile-content-strip {
-        max-height: 45vh;
-        padding: 1.5rem 1.2rem;
-        min-height: 180px;
+        max-height: 40vh;
+        padding: 1rem;
     }
     
     .mobile-content-strip .main-title {
-        font-size: 1.25rem;
-        margin-bottom: 0.8rem;
+        font-size: 1.15rem;
     }
     
     .mobile-content-strip .description {
-        font-size: 0.9rem;
-        margin-bottom: 0.7rem;
+        font-size: 0.85rem;
     }
 }
 
