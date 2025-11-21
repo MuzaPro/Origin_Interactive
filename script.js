@@ -3,49 +3,54 @@
 // State definitions
 const states = {
     1: {
-        title: "Introduction to Modestly Sized Quantum Computers",
+        title: "Resource State Generation",
         descriptions: [
-            "Welcome to the future of quantum computing. Instead of requiring factory-sized facilities, our technology will bring universal quantum computers to your laboratory.",
-            "<span class='highlight'>Use the navigation buttons above</span> to explore the conceptual structure of a quantum computer that fits in your room (instead of <em>being</em> the room)."
+            "To achieve a million qubit computation we would need to combine several units, each producing small clusters of qubits. Since this setup is modular, we can add as many units as needed to reach the desired computation scale.",
+            "The photonic approach allows us to stitch (merge?) small clusters that were generated from separate sources, into a single entangled resource state."
         ],
-        image: "assets/images/state1.webp"
+        image: "assets/images/state1.jpg"
     },
     2: {
-        title: "Quantum System Components",
+        title: "Introducing: ORIGIN",
         descriptions: [
-            "Our quantum computer consists of three main components: the vacuum chamber housing the qubits, optical fiber memory for photon storage, and classical processing unit.",
-            "This small form factor is made possible thanks to our <span class='highlight'>deterministic approach</span>, which eliminates the massive resource overhead of probabilistic systems, making quantum computing accessible and practical."
+            "The single unit is designed to be an efficient yet powerful resource state generator. The photonic approach allows the operation to take place at room temperature with relatively low overhead costs.",
+            "<span class='highlight'>ORIGIN</span> represents the next generation of quantum computing technology."
         ],
-        image: "assets/images/state2.webp"
+        image: "assets/images/state2.jpg"
     },
     3: {
-        title: "Vacuum Chamber",
+        title: "Photonic Chip",
         descriptions: [
-            "Unlike competing technologies requiring extreme cooling, our <span class='highlight'>vacuum chamber operates at room temperature</span>, dramatically reducing infrastructure costs.",
-            "The rubidium atoms are perfectly isolated from environmental noise while remaining accessible for precise manipulation and measurement."
+            "Each vacuum chamber contains a cloud of Rb atoms. With the help of precise laser beams we can direct single atoms to a precise location on the photonic chip above.",
+            "The chips are carved out of a silicon wafer, utilizing the well established production techniques that are already utilized in telecommunications."
         ],
-        image: "assets/images/state3.webp"
+        image: "assets/images/state3.jpg"
     },
     4: {
-        title: "Advanced Quantum Processing",
+        title: "Deterministic Generation + Entanglement",
         descriptions: [
-            "Our advanced quantum processing unit represents the culmination of cutting-edge quantum technology, integrating seamlessly with the vacuum chamber and optical systems.",
-            "This state-of-the-art component enables <span class='highlight'>complex quantum computations</span> while maintaining the compact form factor that sets our system apart."
+            "With the help of cutting edge technology in the field of cavity Quantum Electro Dynamics we are able to efficiently produce photonic qubits at a close to perfect yield.",
+            "This technology enables <span class='highlight'>entanglement of all produced photons</span> with unprecedented precision and reliability."
         ],
-        image: "assets/images/state4.webp"
+        image: "assets/images/state4.png"
     }
 };
 
 // Animation paths
 const animations = {
-    "1-2": "assets/animations/seq1.webm",
-    "2-1": "assets/animations/seq1_reverse.webm",
-    "2-3": "assets/animations/seq2.webm",
-    "3-2": "assets/animations/seq2_reverse.webm",
-    "3-1": "assets/animations/seq3.webm",
-    "1-3": "assets/animations/seq3_reverse.webm",
-    "3-4": "assets/animations/seq4.webm",
-    "4-3": "assets/animations/seq4_reverse.webm"
+    "1-2": "assets/animations/1to2.webm",
+    "2-1": "assets/animations/2to1.webm",
+    "2-3": "assets/animations/2to3.webm",
+    "3-2": "assets/animations/3to2.webm",
+    "1-3": "assets/animations/1to3.webm",
+    "3-1": "assets/animations/3to1.webm"
+    // Transitions to/from state 4 - commented out until assets are ready
+    // "1-4": "assets/animations/1to4.webm",
+    // "4-1": "assets/animations/4to1.webm",
+    // "2-4": "assets/animations/2to4.webm",
+    // "4-2": "assets/animations/4to2.webm",
+    // "3-4": "assets/animations/3to4.webm",
+    // "4-3": "assets/animations/4to3.webm"
 };
 
 // Current state
