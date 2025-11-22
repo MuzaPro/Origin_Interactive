@@ -3,34 +3,38 @@
 // State definitions
 const states = {
     1: {
-        title: "Resource State Generation",
+        title: "Modular Quantum Computing",
         descriptions: [
-            "To achieve a million qubit computation we would need to combine several units, each producing small clusters of qubits. Since this setup is modular, we can add as many units as needed to reach the desired computation scale.",
-            "The photonic approach allows us to stitch (merge?) small clusters that were generated from separate sources, into a single entangled resource state."
+            "Practical quantum computing requires millions of qubits working together—a scale that demands a fundamentally different approach to system architecture.",
+            "Rather than building one impossibly large machine, ORIGIN units work together. Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This fusion-based approach means computational power scales with the number of units deployed.",
+            "A facility can start with what they need today and expand as their requirements grow: from tens of units for research applications to hundreds for enterprise-scale computation."
         ],
-        image: "assets/images/state1.jpg"
+        image: "assets/images/state1.webp"
     },
     2: {
-        title: "Introducing: ORIGIN",
+        title: "Introducing ORIGIN",
         descriptions: [
-            "The single unit is designed to be an efficient yet powerful resource state generator. The photonic approach allows the operation to take place at room temperature with relatively low overhead costs.",
-            "<span class='highlight'>ORIGIN</span> represents the next generation of quantum computing technology."
+            "ORIGIN is a deterministic resource state generator—the essential building block for photonic quantum computation.",
+            "Where conventional photonic systems rely on probabilistic processes that succeed only a fraction of the time, ORIGIN takes a fundamentally different approach. By combining atomic and photonic qubits, each unit generates entangled photon clusters with unprecedented efficiency—approximately four orders of magnitude better than probabilistic methods.",
+            "The result: a system designed to fit in a standard server room rather than a factory floor. No cryogenic cooling. No specialized infrastructure. Room temperature operation with the reliability that practical deployment demands."
         ],
-        image: "assets/images/state2.jpg"
+        image: "assets/images/state2.webp"
     },
     3: {
-        title: "Photonic Chip",
+        title: "Silicon Photonics at the Core",
         descriptions: [
-            "Each vacuum chamber contains a cloud of Rb atoms. With the help of precise laser beams we can direct single atoms to a precise location on the photonic chip above.",
-            "The chips are carved out of a silicon wafer, utilizing the well established production techniques that are already utilized in telecommunications."
+            "At the heart of each ORIGIN unit is a photonic chip built on silicon nitride—leveraging decades of precision manufacturing developed for the telecommunications industry.",
+            "Below the chip, a cloud of rubidium atoms is held in vacuum. Precisely controlled laser beams guide individual atoms to designated coupling sites on the chip surface, where they interact with integrated optical resonators.",
+            "This architecture achieves something remarkable: the quantum precision of isolated atoms combined with the scalability of semiconductor fabrication. Every chip is manufactured using established lithographic processes, creating a clear path from laboratory demonstration to volume production."
         ],
-        image: "assets/images/state3.jpg"
+        image: "assets/images/state3.webp"
     },
     4: {
-        title: "Deterministic Generation + Entanglement",
+        title: "Deterministic Entanglement",
         descriptions: [
-            "With the help of cutting edge technology in the field of cavity Quantum Electro Dynamics we are able to efficiently produce photonic qubits at a close to perfect yield.",
-            "This technology enables <span class='highlight'>entanglement of all produced photons</span> with unprecedented precision and reliability."
+            "The breakthrough behind ORIGIN lies in cavity quantum electrodynamics (QED)—the physics of how light and matter interact in confined spaces.",
+            "When a single rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means each photon can be generated and entangled on demand, with near-perfect efficiency.",
+            "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photonic qubits, ready to be fused into the large-scale resource states that fault-tolerant quantum computing requires."
         ],
         image: "assets/images/state4.png"
     }
@@ -168,11 +172,22 @@ async function preloadAllAssets() {
             video.setAttribute('webkit-playsinline', '');
             video.setAttribute('disablePictureInPicture', '');
             
+            video.onloadedmetadata = () => {
+                console.log(`📊 Video metadata loaded: ${key} (${path})`);
+                console.log(`   Duration: ${video.duration}s`);
+                console.log(`   Dimensions: ${video.videoWidth}x${video.videoHeight}`);
+                console.log(`   Ready state: ${video.readyState}`);
+            };
+            
             video.onloadeddata = () => {
+                console.log(`📦 Video data loaded: ${key}`);
                 preloadedVideos.set(path, video);
                 resolve();
             };
-            video.onerror = resolve;
+            video.onerror = (e) => {
+                console.error(`❌ Video load error: ${key} - ${e.message}`);
+                resolve();
+            };
             video.src = path;
         });
     });
@@ -466,30 +481,31 @@ function instantTransition(targetState, isCompoundSegment = false) {
         const newState = states[targetState];
         if (newState && newState.image) {
             const preloadedImg = preloadedImages.get(newState.image);
-            if (preloadedImg) {
-                stateVisual.src = preloadedImg.src;
-                if (!isCompoundSegment) {
-                    updateContent(targetState);
-                }
-                // Adjust portrait layout after image loads
-                setTimeout(() => {
-                    adjustPortraitLayout();
-                }, 50);
-                resolve();
-            } else {
-                // Fallback if not preloaded
-                const tempImg = new Image();
-                tempImg.onload = () => {
-                    stateVisual.src = tempImg.src;
+            
+            const updateImage = () => {
+                // Use requestAnimationFrame for smooth transition
+                requestAnimationFrame(() => {
+                    stateVisual.src = newState.image;
                     if (!isCompoundSegment) {
                         updateContent(targetState);
                     }
-                    // Adjust portrait layout after image loads
-                    setTimeout(() => {
+                    
+                    // Wait for next frame before adjusting layout
+                    requestAnimationFrame(() => {
                         adjustPortraitLayout();
-                    }, 50);
-                    resolve();
-                };
+                        setTimeout(() => {
+                            resolve();
+                        }, 16); // One frame delay
+                    });
+                });
+            };
+            
+            if (preloadedImg) {
+                updateImage();
+            } else {
+                // Fallback if not preloaded
+                const tempImg = new Image();
+                tempImg.onload = updateImage;
                 tempImg.onerror = () => {
                     console.warn(`Failed to load image: ${newState.image}`);
                     resolve();
@@ -507,40 +523,70 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
     return new Promise((resolve, reject) => {
         const preloadedVideo = preloadedVideos.get(animationPath);
         
-        if (preloadedVideo) {
-            // Use the preloaded video data
-            stateAnimation.src = preloadedVideo.src;
+        // Pre-load the target image to ensure smooth transition
+        const newState = states[targetState];
+        const preloadedImg = newState ? preloadedImages.get(newState.image) : null;
+        
+        console.log(`🎬 Starting transition: ${currentState}→${targetState} (${animationPath})`);
+        console.log(`📹 Video preloaded: ${!!preloadedVideo}`);
+        console.log(`🖼️ Target image preloaded: ${!!preloadedImg}`);
+        
+        const startAnimation = () => {
+            console.log(`▶️ Starting video playback - readyState: ${stateAnimation.readyState}, duration: ${stateAnimation.duration}`);
+            
+            // Ensure the video is properly reset before playing
             stateAnimation.currentTime = 0;
             stateAnimation.playbackRate = 1;
             
-            stateAnimation.classList.add('playing');
+            // Apply dimension normalization for problematic videos
+            const videoWidth = stateAnimation.videoWidth || (preloadedVideo ? preloadedVideo.videoWidth : 1920);
+            const standardWidth = 1920;
             
-            const playPromise = stateAnimation.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(err => {
-                    console.error('Playback error:', err);
-                    updateToTargetImage();
-                });
+            if (videoWidth !== standardWidth) {
+                const scaleX = standardWidth / videoWidth;
+                console.log(`🔧 Applying scale correction: ${scaleX.toFixed(4)} for ${videoWidth}px → ${standardWidth}px`);
+                stateAnimation.style.transform = `scale(${scaleX}, 1)`;
+            } else {
+                stateAnimation.style.transform = '';
+            }
+            
+            // Wait one frame before starting to ensure proper synchronization
+            requestAnimationFrame(() => {
+                stateAnimation.classList.add('playing');
+                
+                const playPromise = stateAnimation.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.error('Playback error:', err);
+                        updateToTargetImage();
+                    });
+                }
+            });
+        };
+        
+        if (preloadedVideo) {
+            // Use the preloaded video data
+            stateAnimation.src = preloadedVideo.src;
+            
+            // Wait for the video to be properly loaded before starting
+            if (stateAnimation.readyState >= 2) { // HAVE_CURRENT_DATA
+                startAnimation();
+            } else {
+                stateAnimation.onloadeddata = () => {
+                    startAnimation();
+                };
             }
         } else {
             // Original loading code as fallback
             stateAnimation.src = animationPath;
             
             stateAnimation.onloadedmetadata = () => {
-                stateAnimation.currentTime = 0;
-                stateAnimation.playbackRate = 1;
-                
-                stateAnimation.classList.add('playing');
-                stateAnimation
-                    .play()
-                    .catch(err => {
-                        console.error('Playback error:', err);
-                        updateToTargetImage();
-                    });
+                startAnimation();
             };
         }
 
         stateAnimation.onended = () => {
+            console.log(`🏁 Video ended - currentTime: ${stateAnimation.currentTime}, duration: ${stateAnimation.duration}`);
             updateToTargetImage();
         };
 
@@ -549,27 +595,67 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
             instantTransition(targetState, isCompoundSegment).then(resolve).catch(reject);
         };
 
+        // Add additional event listeners for debugging
+        stateAnimation.onloadstart = () => console.log(`📥 Video load start: ${animationPath}`);
+        stateAnimation.oncanplay = () => console.log(`✅ Video can play - readyState: ${stateAnimation.readyState}`);
+        stateAnimation.onplaying = () => console.log(`▶️ Video playing started`);
+        stateAnimation.onseeking = () => console.log(`⏩ Video seeking to: ${stateAnimation.currentTime}`);
+        stateAnimation.onseeked = () => console.log(`⏭️ Video seek complete: ${stateAnimation.currentTime}`);
+
         function updateToTargetImage() {
-            const newState = states[targetState];
+            console.log(`🖼️ Updating to target image: ${newState?.image}`);
+            console.log(`📐 Video final frame: ${stateAnimation.videoWidth}x${stateAnimation.videoHeight}`);
+            console.log(`📐 Container dimensions: ${stateAnimation.offsetWidth}x${stateAnimation.offsetHeight}`);
+            
             if (newState && newState.image) {
-                const preloadedImg = preloadedImages.get(newState.image);
-                const tempImg = preloadedImg || new Image();
-                
                 const updateImage = () => {
-                    stateVisual.src = newState.image;
-                    if (!isCompoundSegment) {
-                        updateContent(targetState);
-                    }
-                    adjustPortraitLayout();
-                    setTimeout(() => {
-                        stateAnimation.classList.remove('playing');
-                        resolve();
-                    }, 50);
+                    // Get the current visual state before switching
+                    const videoBounds = stateAnimation.getBoundingClientRect();
+                    console.log(`📊 Video bounds before switch: ${videoBounds.width}x${videoBounds.height} at (${videoBounds.left}, ${videoBounds.top})`);
+                    
+                    // Use requestAnimationFrame for smooth transition
+                    requestAnimationFrame(() => {
+                        console.log(`🔄 Switching image source`);
+                        
+                        // Force the video to fade out faster to minimize visible switching
+                        stateAnimation.style.transition = 'opacity 0.05s ease-out';
+                        stateAnimation.style.opacity = '0';
+                        
+                        // Switch image immediately
+                        stateVisual.src = newState.image;
+                        if (!isCompoundSegment) {
+                            updateContent(targetState);
+                        }
+                        
+                        // Wait for next frame before removing playing class
+                        requestAnimationFrame(() => {
+                            console.log(`🎭 Removing playing class and finishing transition`);
+                            stateAnimation.classList.remove('playing');
+                            
+                            // Reset transition and transform back to normal
+                            stateAnimation.style.transition = '';
+                            stateAnimation.style.opacity = '';
+                            stateAnimation.style.transform = '';
+                            
+                            // Get image bounds after switch
+                            const imageBounds = stateVisual.getBoundingClientRect();
+                            console.log(`📊 Image bounds after switch: ${imageBounds.width}x${imageBounds.height} at (${imageBounds.left}, ${imageBounds.top})`);
+                            
+                            adjustPortraitLayout();
+                            
+                            // Small delay to ensure everything is settled
+                            setTimeout(() => {
+                                console.log(`✅ Transition complete: ${currentState}→${targetState}`);
+                                resolve();
+                            }, 16); // One frame at 60fps
+                        });
+                    });
                 };
                 
                 if (preloadedImg) {
                     updateImage();
                 } else {
+                    const tempImg = new Image();
                     tempImg.onload = updateImage;
                     tempImg.onerror = () => {
                         console.warn(`Failed to load image: ${newState.image}`);
