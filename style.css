@@ -97,7 +97,7 @@ html, body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 25vw;
+    width: 30vw;
     height: 100vh;
     background: rgba(15, 40, 45, 0.4);
     backdrop-filter: blur(20px);
@@ -243,6 +243,34 @@ html, body {
     margin: 1rem;
     border-radius: 24px;
     border: 1px solid rgba(62, 193, 201, 0.1);
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(62, 193, 201, 0.6) rgba(255, 255, 255, 0.1);
+}
+
+/* Webkit scrollbar styling for desktop content area */
+.content-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-area::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background: rgba(62, 193, 201, 0.6);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.content-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(62, 193, 201, 0.8);
+}
+
+.content-area::-webkit-scrollbar-corner {
+    background: transparent;
 }
 
 .content-area.fade-out {
@@ -331,7 +359,7 @@ html, body {
 /* Tablet Layout */
 @media (max-width: 1024px) {
     .sidebar {
-        width: 35vw;
+        width: 42vw;
     }
     
     .main-title {
@@ -551,8 +579,8 @@ html, body {
         position: fixed;
         top: 0;
         left: 0;
-        width: 14vw;
-        min-width: 90px;
+        width: 17vw;
+        min-width: 108px;
         height: 100vh;
         background: rgba(9, 24, 31, 0.6);
         backdrop-filter: blur(20px);
@@ -618,8 +646,8 @@ html, body {
         display: block !important;
         position: fixed;
         top: 0;
-        left: 14vw;
-        width: 36vw;
+        left: 17vw;
+        width: 33vw;
         height: 100vh;
         padding: 2rem 1.5rem;
         overflow-y: auto;

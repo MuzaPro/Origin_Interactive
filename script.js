@@ -5,8 +5,8 @@ const states = {
     1: {
         title: "Modular Quantum Computing",
         descriptions: [
-            "Practical quantum computing requires millions of qubits working together—a scale that demands a fundamentally different approach to system architecture.",
-            "Rather than building one impossibly large machine, ORIGIN units work together. Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This fusion-based approach means computational power scales with the number of units deployed.",
+            "Practical quantum computing requires millions of qubits working together, a scale that demands a fundamentally different approach to system architecture.",
+            "Rather than building one impossibly large machine, <span class='highlight'>ORIGIN units work together</span>, Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This fusion-based approach means computational power scales with the number of units deployed.",
             "A facility can start with what they need today and expand as their requirements grow: from tens of units for research applications to hundreds for enterprise-scale computation."
         ],
         image: "assets/images/state1.webp",
@@ -15,8 +15,8 @@ const states = {
     2: {
         title: "Introducing ORIGIN",
         descriptions: [
-            "ORIGIN is a deterministic resource state generator—the essential building block for photonic quantum computation.",
-            "Where conventional photonic systems rely on probabilistic processes that succeed only a fraction of the time, ORIGIN takes a fundamentally different approach. By combining atomic and photonic qubits, each unit generates entangled photon clusters with unprecedented efficiency—approximately four orders of magnitude better than probabilistic methods.",
+            "<span class='highlight'>ORIGIN is a deterministic resource state generator.</span> The essential building block for photonic quantum computation.",
+            "Where conventional photonic systems rely on probabilistic processes that succeed only a fraction of the time, ORIGIN takes a fundamentally different approach. By combining atomic and photonic qubits, each unit generates entangled photon clusters with unprecedented efficiency: approximately four orders of magnitude better than probabilistic methods!",
             "The result: a system designed to fit in a standard server room rather than a factory floor. No cryogenic cooling. No specialized infrastructure. Room temperature operation with the reliability that practical deployment demands."
         ],
         image: "assets/images/state2.webp"
@@ -33,8 +33,8 @@ const states = {
     4: {
         title: "Deterministic Entanglement",
         descriptions: [
-            "The breakthrough behind ORIGIN lies in cavity quantum electrodynamics (QED)—the physics of how light and matter interact in confined spaces.",
-            "When a single rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means each photon can be generated and entangled on demand, with near-perfect efficiency.",
+            "The breakthrough behind ORIGIN lies in cavity quantum electrodynamics (QED): the physics of how light and matter interact in confined spaces.",
+            "When a single rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means <span class='highlight'> each photon can be generated and entangled on demand, with near-perfect efficiency.</span>",
             "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photonic qubits, ready to be fused into the large-scale resource states that fault-tolerant quantum computing requires."
         ],
         image: "assets/images/state4.png",
