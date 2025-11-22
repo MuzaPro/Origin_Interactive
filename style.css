@@ -275,19 +275,38 @@ html, body {
     text-align: center;
     opacity: 0;
     transition: opacity 0.5s ease-in;
+    width: 100%;
 }
 
 .svg-container svg {
-    max-width: 100%;
-    height: auto;
+    width: 100% !important;
+    height: auto !important;
     max-height: 300px;
+    min-height: 200px;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    display: block;
+    margin: 0 auto;
 }
 
 /* Mobile SVG adjustments */
 @media (max-width: 768px) {
+    .svg-container {
+        margin-top: 1.5rem;
+    }
+    
     .svg-container svg {
-        max-height: 200px;
+        width: 100% !important;
+        max-height: 220px;
+        min-height: 150px;
+    }
+}
+
+/* Landscape mode SVG adjustments */
+@media (max-width: 1024px) and (orientation: landscape) {
+    .svg-container svg {
+        width: 100% !important;
+        max-height: 180px;
+        min-height: 120px;
     }
 }
 

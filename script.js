@@ -37,7 +37,8 @@ const states = {
             "When a single rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means each photon can be generated and entangled on demand, with near-perfect efficiency.",
             "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photonic qubits, ready to be fused into the large-scale resource states that fault-tolerant quantum computing requires."
         ],
-        image: "assets/images/state4.png"
+        image: "assets/images/state4.png",
+        svg: "assets/vector_graphics/q-logic-gates.svg"
     }
 };
 
