@@ -269,6 +269,28 @@ html, body {
     margin-bottom: 0;
 }
 
+/* SVG Container Styles */
+.svg-container {
+    margin-top: 2rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.svg-container svg {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Mobile SVG adjustments */
+@media (max-width: 768px) {
+    .svg-container svg {
+        max-height: 200px;
+    }
+}
+
 .highlight {
     color: var(--accent) !important;
     font-weight: 600;

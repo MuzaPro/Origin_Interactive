@@ -9,7 +9,8 @@ const states = {
             "Rather than building one impossibly large machine, ORIGIN units work together. Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This fusion-based approach means computational power scales with the number of units deployed.",
             "A facility can start with what they need today and expand as their requirements grow: from tens of units for research applications to hundreds for enterprise-scale computation."
         ],
-        image: "assets/images/state1.webp"
+        image: "assets/images/state1.webp",
+        svg: "assets/vector_graphics/stitching.svg"
     },
     2: {
         title: "Introducing ORIGIN",
@@ -127,6 +128,10 @@ const mobileContentArea = document.getElementById('mobileContentArea');
 const mobileMainTitle = document.getElementById('mobileMainTitle');
 const mobileDescription1 = document.getElementById('mobileDescription1');
 const mobileDescription2 = document.getElementById('mobileDescription2');
+
+// SVG container elements
+const svgContainer = document.getElementById('svgContainer');
+const mobileSvgContainer = document.getElementById('mobileSvgContainer');
 
 // Navigation elements
 const allNavItems = document.querySelectorAll('.nav-item');
@@ -425,6 +430,40 @@ function fadeTextTransition(element, fromText, toText) {
     }, 200);
 }
 
+// Load and display SVG content
+async function loadSVG(svgPath, container) {
+    if (!svgPath || !container) return;
+    
+    try {
+        const response = await fetch(svgPath);
+        const svgContent = await response.text();
+        container.innerHTML = svgContent;
+        
+        // Add fade-in animation
+        container.style.opacity = '0';
+        container.style.transition = 'opacity 0.5s ease-in';
+        
+        requestAnimationFrame(() => {
+            container.style.opacity = '1';
+        });
+    } catch (error) {
+        console.warn(`Failed to load SVG: ${svgPath}`, error);
+        container.innerHTML = '';
+    }
+}
+
+// Clear SVG content with fade-out
+function clearSVG(container) {
+    if (!container) return;
+    
+    container.style.transition = 'opacity 0.3s ease-out';
+    container.style.opacity = '0';
+    
+    setTimeout(() => {
+        container.innerHTML = '';
+    }, 300);
+}
+
 // Compound transition through intermediate state
 async function performCompoundTransition(fromState, intermediateState, toState) {
     console.log(`Starting compound transition: ${fromState} → ${intermediateState} → ${toState}`);
@@ -690,6 +729,13 @@ function updateContent(stateId) {
         if (description2) {
             description2.innerHTML = state.descriptions[1] || '';
         }
+        
+        // Handle SVG content for desktop
+        if (state.svg && svgContainer) {
+            loadSVG(state.svg, svgContainer);
+        } else if (svgContainer) {
+            clearSVG(svgContainer);
+        }
     }
 
     // Update mobile portrait content
@@ -702,6 +748,13 @@ function updateContent(stateId) {
         }
         if (mobileDescription2) {
             mobileDescription2.innerHTML = state.descriptions[1] || '';
+        }
+        
+        // Handle SVG content for mobile
+        if (state.svg && mobileSvgContainer) {
+            loadSVG(state.svg, mobileSvgContainer);
+        } else if (mobileSvgContainer) {
+            clearSVG(mobileSvgContainer);
         }
     }
     
