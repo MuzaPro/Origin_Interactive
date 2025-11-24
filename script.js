@@ -153,6 +153,36 @@ function getLayoutMode() {
     }
 }
 
+// Update nav button text based on layout mode
+function updateNavButtonText() {
+    const layoutMode = getLayoutMode();
+    const isMobilePortrait = layoutMode === 'portrait';
+    
+    // Update all nav items (both desktop and mobile)
+    allNavItems.forEach(item => {
+        const navTextElement = item.querySelector('.nav-text');
+        if (navTextElement && isMobilePortrait) {
+            // Use short mobile text for portrait mode
+            const mobileText = item.getAttribute('data-mobile-text');
+            if (mobileText) {
+                navTextElement.textContent = mobileText;
+            }
+        } else if (navTextElement && !isMobilePortrait) {
+            // Use full text for desktop and landscape modes
+            const state = item.getAttribute('data-state');
+            const fullTexts = {
+                '1': 'Scalable Architecture',
+                '2': 'The Building Block',
+                '3': 'Inside the System',
+                '4': 'The Science'
+            };
+            if (fullTexts[state]) {
+                navTextElement.textContent = fullTexts[state];
+            }
+        }
+    });
+}
+
 // Preload all animations and images
 async function preloadAllAssets() {
     // Preload all images
@@ -210,6 +240,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupNavListeners();
     setupAudioListeners();
     setupBackgroundClickNavigation();
+    
+    // Update nav button text based on layout
+    updateNavButtonText();
     
     // Update initial state
     updateActiveNav();
@@ -809,6 +842,7 @@ window.addEventListener('load', adjustPortraitLayout);
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
+        updateNavButtonText();
         adjustPortraitLayout();
         updateContent(currentState);
     }, 250);
