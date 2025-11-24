@@ -38,7 +38,7 @@ const states = {
             "When a single Rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means <span class='highlight'> each photon can be generated and entangled on demand, with near-perfect efficiency.</span>",
             "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photonic qubits, ready to be fused into the large-scale resource states that fault-tolerant quantum computing requires."
         ],
-        image: "assets/images/state4.png",
+        loopingVideo: "assets/animations/Resonators.webm",
         svg: "assets/vector_graphics/q-logic-gates.svg"
     }
 };
@@ -592,12 +592,52 @@ async function performCompoundTransition(fromState, intermediateState, toState) 
 function instantTransition(targetState, isCompoundSegment = false) {
     return new Promise((resolve) => {
         const newState = states[targetState];
-        if (newState && newState.image) {
+        
+        // Handle looping video
+        if (newState && newState.loopingVideo) {
+            requestAnimationFrame(() => {
+                // Hide static image
+                stateVisual.style.opacity = '0';
+                
+                // Setup looping video
+                stateAnimation.src = newState.loopingVideo;
+                stateAnimation.loop = true;
+                stateAnimation.muted = true;
+                stateAnimation.style.opacity = '1';
+                stateAnimation.classList.add('playing');
+                
+                stateAnimation.play().catch(err => {
+                    console.warn('Failed to play looping video:', err);
+                });
+                
+                if (!isCompoundSegment) {
+                    updateContent(targetState);
+                }
+                
+                requestAnimationFrame(() => {
+                    adjustPortraitLayout();
+                    setTimeout(() => {
+                        resolve();
+                    }, 16);
+                });
+            });
+        }
+        // Handle static image
+        else if (newState && newState.image) {
             const preloadedImg = preloadedImages.get(newState.image);
             
             const updateImage = () => {
                 // Use requestAnimationFrame for smooth transition
                 requestAnimationFrame(() => {
+                    // Stop any looping video
+                    if (stateAnimation.loop) {
+                        stateAnimation.pause();
+                        stateAnimation.loop = false;
+                        stateAnimation.style.opacity = '0';
+                        stateAnimation.classList.remove('playing');
+                    }
+                    
+                    stateVisual.style.opacity = '1';
                     stateVisual.src = newState.image;
                     if (!isCompoundSegment) {
                         updateContent(targetState);
@@ -716,11 +756,44 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
         stateAnimation.onseeked = () => console.log(`⏭️ Video seek complete: ${stateAnimation.currentTime}`);
 
         function updateToTargetImage() {
-            console.log(`🖼️ Updating to target image: ${newState?.image}`);
+            console.log(`🖼️ Updating to target: ${newState?.image || newState?.loopingVideo}`);
             console.log(`📐 Video final frame: ${stateAnimation.videoWidth}x${stateAnimation.videoHeight}`);
             console.log(`📐 Container dimensions: ${stateAnimation.offsetWidth}x${stateAnimation.offsetHeight}`);
             
-            if (newState && newState.image) {
+            // Handle looping video target
+            if (newState && newState.loopingVideo) {
+                requestAnimationFrame(() => {
+                    console.log(`🔄 Switching to looping video`);
+                    
+                    // Hide static image
+                    stateVisual.style.opacity = '0';
+                    
+                    // Setup and play looping video
+                    stateAnimation.src = newState.loopingVideo;
+                    stateAnimation.loop = true;
+                    stateAnimation.muted = true;
+                    stateAnimation.style.transition = 'opacity 0.3s ease-in';
+                    stateAnimation.style.opacity = '1';
+                    stateAnimation.classList.add('playing');
+                    
+                    stateAnimation.play().catch(err => {
+                        console.warn('Failed to play looping video:', err);
+                    });
+                    
+                    if (!isCompoundSegment) {
+                        updateContent(targetState);
+                    }
+                    
+                    adjustPortraitLayout();
+                    
+                    setTimeout(() => {
+                        console.log(`✅ Transition complete to looping video: ${currentState}→${targetState}`);
+                        resolve();
+                    }, 16);
+                });
+            }
+            // Handle static image target
+            else if (newState && newState.image) {
                 const updateImage = () => {
                     // Get the current visual state before switching
                     const videoBounds = stateAnimation.getBoundingClientRect();
@@ -734,7 +807,14 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
                         stateAnimation.style.transition = 'opacity 0.05s ease-out';
                         stateAnimation.style.opacity = '0';
                         
-                        // Switch image immediately
+                        // Stop looping if active
+                        if (stateAnimation.loop) {
+                            stateAnimation.pause();
+                            stateAnimation.loop = false;
+                        }
+                        
+                        // Show static image
+                        stateVisual.style.opacity = '1';
                         stateVisual.src = newState.image;
                         if (!isCompoundSegment) {
                             updateContent(targetState);
