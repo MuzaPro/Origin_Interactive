@@ -73,6 +73,75 @@ Fixed missing third description paragraph in state 4 that should appear after th
 The figure in state 4 is still a little cropped sometimes in the desktop version, and it is very corpped on some mobile devices. we need to research this and figure out what's the best way to show the graphics in the content section.
 
 
+### implementation report
+**Completed: Nov 24, 2025**
+
+Fixed SVG graphics cropping issue across all devices through root cause analysis and proper SVG viewport configuration:
+
+**Root Cause Analysis:**
+The inconsistent cropping behavior stemmed from a fundamental SVG scaling issue:
+
+1. **Missing viewBox Attribute**: The SVG file (`q-logic-gates.svg`) contained physical dimensions (`width="597" height="324"`) but was missing the critical `viewBox` attribute
+2. **CSS Constraints Conflict**: The CSS applied varying fixed max-heights across responsive breakpoints:
+   - Desktop: `max-height: 300px`
+   - Mobile portrait: `max-height: 220px`
+   - Landscape: `max-height: 180px`
+   - Combined with `width: 100%` and `height: auto`
+3. **Scaling Breakdown**: Without a viewBox, the browser treated the SVG with intrinsic pixel dimensions but couldn't establish a proper coordinate system for responsive scaling
+4. **Aspect Ratio Loss**: The combination of forced width (100%) with varying max-heights and no viewBox caused aspect ratio distortion and inconsistent cropping across different viewport sizes
+
+**The Solution:**
+Added proper viewport definition to the SVG file by modifying the opening `<svg>` tag:
+
+**Before:**
+```xml
+<svg width="597" height="324" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" overflow="hidden">
+```
+
+**After:**
+```xml
+<svg width="597" height="324" viewBox="0 0 597 324" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" overflow="hidden">
+```
+
+**Technical Explanation:**
+
+- **`viewBox="0 0 597 324"`**: Defines the SVG's internal coordinate system with origin at (0,0) and dimensions matching the original 597×324 pixel canvas. This tells the browser the "virtual canvas" that should be scaled to fit the container.
+
+- **`preserveAspectRatio="xMidYMid meet"`**: Ensures the SVG scales proportionally while:
+  - `xMidYMid`: Centers the graphic both horizontally and vertically within the container
+  - `meet`: Scales the entire SVG to fit within the container bounds (similar to CSS `object-fit: contain`)
+  - Prevents distortion by maintaining the 597:324 aspect ratio
+
+**Why This Works:**
+
+1. The viewBox establishes a coordinate system independent of physical pixel dimensions
+2. When CSS applies `width: 100%` and `height: auto` with max-height constraints, the browser can now calculate proper scaling ratios
+3. The aspect ratio is preserved across all responsive breakpoints
+4. The SVG scales smoothly from 597px down to container constraints without cropping
+5. Content remains fully visible regardless of viewport size or orientation
+
+**File Modified:**
+- `assets/vector_graphics/q-logic-gates.svg`
+
+**Result:**
+- SVG displays correctly across desktop, landscape mobile, and portrait mobile
+- No cropping on any device or orientation
+- Proper aspect ratio maintained at all viewport sizes
+- Content remains centered and fully visible within containers
+
+**Applying This Solution to Future SVG Issues:**
+
+If similar cropping/scaling problems occur with other SVGs:
+
+1. **Diagnose**: Check if the SVG file has a `viewBox` attribute in the opening `<svg>` tag
+2. **Extract Dimensions**: Note the `width` and `height` values (e.g., width="597" height="324")
+3. **Add viewBox**: Set `viewBox="0 0 [width] [height]"` using the same dimensions
+4. **Add preserveAspectRatio**: Use `preserveAspectRatio="xMidYMid meet"` for centered, proportional scaling
+5. **Test**: Verify across all responsive breakpoints (desktop, landscape, portrait)
+
+**Key Principle**: The viewBox defines the SVG's "user space" coordinate system, enabling resolution-independent scaling. Without it, SVGs with physical dimensions can't scale properly when CSS applies fluid width/height constraints.
+
+
 ## 9.4 scroll to top
 When user reads the text and scrolls all the way to the button they finish reading in a position where they have scrolled all the way down. Then they typically switch to the next state. On some laptops I have found that switching states in this situation results in the user being already ate the buttom of the scroll in the new state, without ever seeing the top of the new text content. we need to make sure that appon new text appearing - the user is placed ate the top of the text. 
 
