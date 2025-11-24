@@ -300,6 +300,7 @@ html, body {
 /* SVG Container Styles */
 .svg-container {
     margin-top: 2rem;
+    margin-bottom: 2rem;
     text-align: center;
     opacity: 0;
     transition: opacity 0.5s ease-in;
@@ -314,6 +315,15 @@ html, body {
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
     display: block;
     margin: 0 auto;
+}
+
+/* Third description appears after SVG */
+#description3,
+#mobileDescription3 {
+    margin-top: 1rem;
+    display: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
 /* Mobile SVG adjustments */

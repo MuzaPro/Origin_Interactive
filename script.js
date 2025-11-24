@@ -123,12 +123,14 @@ const contentArea = document.getElementById('contentArea');
 const mainTitle = document.getElementById('mainTitle');
 const description1 = document.getElementById('description1');
 const description2 = document.getElementById('description2');
+const description3 = document.getElementById('description3');
 
 // Mobile content elements
 const mobileContentArea = document.getElementById('mobileContentArea');
 const mobileMainTitle = document.getElementById('mobileMainTitle');
 const mobileDescription1 = document.getElementById('mobileDescription1');
 const mobileDescription2 = document.getElementById('mobileDescription2');
+const mobileDescription3 = document.getElementById('mobileDescription3');
 
 // SVG container elements
 const svgContainer = document.getElementById('svgContainer');
@@ -414,16 +416,18 @@ function startTextTransition(fromState, toState) {
     const layoutMode = getLayoutMode();
     
     // Choose which content elements to animate based on layout
-    let titleElement, desc1Element, desc2Element;
+    let titleElement, desc1Element, desc2Element, desc3Element;
     
     if (layoutMode === 'portrait') {
         titleElement = mobileMainTitle;
         desc1Element = mobileDescription1;
         desc2Element = mobileDescription2;
+        desc3Element = mobileDescription3;
     } else { // desktop or landscape
         titleElement = mainTitle;
         desc1Element = description1;
         desc2Element = description2;
+        desc3Element = description3;
     }
     
     // Animate the title transition
@@ -439,6 +443,30 @@ function startTextTransition(fromState, toState) {
     // Animate the second description
     if (desc2Element && fromStateData.descriptions[1] && toStateData.descriptions[1]) {
         fadeTextTransition(desc2Element, fromStateData.descriptions[1], toStateData.descriptions[1]);
+    }
+    
+    // Animate the third description (if it exists)
+    if (desc3Element) {
+        if (fromStateData.descriptions[2] && toStateData.descriptions[2]) {
+            fadeTextTransition(desc3Element, fromStateData.descriptions[2], toStateData.descriptions[2]);
+        } else if (toStateData.descriptions[2]) {
+            // Fade in if target has third description but source doesn't
+            desc3Element.innerHTML = toStateData.descriptions[2];
+            desc3Element.style.display = 'block';
+            desc3Element.style.opacity = '0';
+            setTimeout(() => {
+                desc3Element.style.transition = 'opacity 0.3s ease-in';
+                desc3Element.style.opacity = '1';
+            }, 100);
+        } else {
+            // Fade out if source had third description but target doesn't
+            desc3Element.style.transition = 'opacity 0.2s ease-out';
+            desc3Element.style.opacity = '0';
+            setTimeout(() => {
+                desc3Element.style.display = 'none';
+                desc3Element.innerHTML = '';
+            }, 200);
+        }
     }
 }
 
@@ -770,6 +798,12 @@ function updateContent(stateId) {
         } else if (svgContainer) {
             clearSVG(svgContainer);
         }
+        
+        // Handle third description (appears after SVG)
+        if (description3) {
+            description3.innerHTML = state.descriptions[2] || '';
+            description3.style.display = state.descriptions[2] ? 'block' : 'none';
+        }
     }
 
     // Update mobile portrait content
@@ -789,6 +823,12 @@ function updateContent(stateId) {
             loadSVG(state.svg, mobileSvgContainer);
         } else if (mobileSvgContainer) {
             clearSVG(mobileSvgContainer);
+        }
+        
+        // Handle third description (appears after SVG)
+        if (mobileDescription3) {
+            mobileDescription3.innerHTML = state.descriptions[2] || '';
+            mobileDescription3.style.display = state.descriptions[2] ? 'block' : 'none';
         }
     }
     
