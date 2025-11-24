@@ -25,7 +25,7 @@ const states = {
         title: "Silicon Photonics at the Core",
         descriptions: [
             "At the heart of each ORIGIN unit is a photonic chip built on silicon nitride—leveraging decades of precision manufacturing developed for the telecommunications industry.",
-            "Below the chip, a cloud of rubidium atoms is held in vacuum. Precisely controlled laser beams guide individual atoms to designated coupling sites on the chip surface, where they interact with integrated optical resonators.",
+            "Below the chip, a cloud of Rubidium atoms is held in vacuum. Precisely controlled laser beams guide individual atoms to designated coupling sites on the chip surface, where they interact with integrated optical resonators.",
             "This architecture achieves something remarkable: the quantum precision of isolated atoms combined with the scalability of semiconductor fabrication. Every chip is manufactured using established lithographic processes, creating a clear path from laboratory demonstration to volume production."
         ],
         image: "assets/images/state3.webp"
@@ -34,7 +34,7 @@ const states = {
         title: "Deterministic Entanglement",
         descriptions: [
             "The breakthrough behind ORIGIN lies in cavity quantum electrodynamics (QED): the physics of how light and matter interact in confined spaces.",
-            "When a single rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means <span class='highlight'> each photon can be generated and entangled on demand, with near-perfect efficiency.</span>",
+            "When a single Rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means <span class='highlight'> each photon can be generated and entangled on demand, with near-perfect efficiency.</span>",
             "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photonic qubits, ready to be fused into the large-scale resource states that fault-tolerant quantum computing requires."
         ],
         image: "assets/images/state4.png",
