@@ -19,7 +19,8 @@ const states = {
             "Where conventional photonic systems rely on probabilistic processes that succeed only a fraction of the time, ORIGIN takes a fundamentally different approach. By combining atomic and photonic qubits, each unit generates entangled photon clusters with unprecedented efficiency: approximately four orders of magnitude better than probabilistic methods!",
             "The result: a system designed to fit in a standard server room rather than a factory floor. No cryogenic cooling. No specialized infrastructure. Room temperature operation with the reliability that practical deployment demands."
         ],
-        image: "assets/images/state2.webp"
+        image: "assets/images/state2.webp",
+        videoUrl: "https://youtu.be/-pp3bKn8Fg8"
     },
     3: {
         title: "Silicon Photonics at the Core",
@@ -124,6 +125,7 @@ const mainTitle = document.getElementById('mainTitle');
 const description1 = document.getElementById('description1');
 const description2 = document.getElementById('description2');
 const description3 = document.getElementById('description3');
+const videoButton = document.getElementById('videoButton');
 
 // Mobile content elements
 const mobileContentArea = document.getElementById('mobileContentArea');
@@ -131,6 +133,7 @@ const mobileMainTitle = document.getElementById('mobileMainTitle');
 const mobileDescription1 = document.getElementById('mobileDescription1');
 const mobileDescription2 = document.getElementById('mobileDescription2');
 const mobileDescription3 = document.getElementById('mobileDescription3');
+const mobileVideoButton = document.getElementById('mobileVideoButton');
 
 // SVG container elements
 const svgContainer = document.getElementById('svgContainer');
@@ -801,6 +804,19 @@ function updateContent(stateId) {
             description2.innerHTML = state.descriptions[1] || '';
         }
         
+        // Handle video button visibility
+        if (videoButton) {
+            if (state.videoUrl) {
+                videoButton.style.display = 'inline-flex';
+                videoButton.onclick = () => {
+                    playButtonSound();
+                    window.open(state.videoUrl, '_blank', 'noopener,noreferrer');
+                };
+            } else {
+                videoButton.style.display = 'none';
+            }
+        }
+        
         // Handle SVG content for desktop
         if (state.svg && svgContainer) {
             loadSVG(state.svg, svgContainer);
@@ -825,6 +841,19 @@ function updateContent(stateId) {
         }
         if (mobileDescription2) {
             mobileDescription2.innerHTML = state.descriptions[1] || '';
+        }
+        
+        // Handle video button visibility for mobile
+        if (mobileVideoButton) {
+            if (state.videoUrl) {
+                mobileVideoButton.style.display = 'inline-flex';
+                mobileVideoButton.onclick = () => {
+                    playButtonSound();
+                    window.open(state.videoUrl, '_blank', 'noopener,noreferrer');
+                };
+            } else {
+                mobileVideoButton.style.display = 'none';
+            }
         }
         
         // Handle SVG content for mobile

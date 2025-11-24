@@ -353,6 +353,50 @@ html, body {
     font-weight: 600;
 }
 
+/* Video Button Styles */
+.video-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.75rem;
+    margin: 1.5rem 0;
+    background: linear-gradient(135deg, rgba(62, 193, 201, 0.15), rgba(22, 100, 112, 0.1));
+    border: 1px solid rgba(62, 193, 201, 0.3);
+    border-radius: 16px;
+    color: white;
+    font-family: 'Overpass', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 15px rgba(62, 193, 201, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.video-button:hover {
+    background: linear-gradient(135deg, rgba(62, 193, 201, 0.25), rgba(22, 100, 112, 0.2));
+    border-color: rgba(62, 193, 201, 0.5);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 25px rgba(62, 193, 201, 0.2);
+}
+
+.video-button:active {
+    transform: translateY(0) scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+.video-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    transition: transform 0.3s ease;
+}
+
+.video-button:hover .video-icon {
+    transform: scale(1.1);
+}
+
 /* Mobile elements - hidden on desktop */
 .mobile-nav-bar {
     display: none;
