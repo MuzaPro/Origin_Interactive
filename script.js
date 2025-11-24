@@ -352,6 +352,15 @@ async function transitionToState(targetState, isCompoundSegment = false) {
     const animationPath = animations[key];
     
     try {
+        // Scroll to top when changing states (unless this is part of a compound transition)
+        if (!isCompoundSegment) {
+            const layoutMode = getLayoutMode();
+            const scrollContainer = layoutMode === 'portrait' ? mobileContentArea : contentArea;
+            if (scrollContainer) {
+                scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
         // Start content transition immediately (unless this is part of a compound transition)
         if (!isCompoundSegment) {
             // Start text transition animation
