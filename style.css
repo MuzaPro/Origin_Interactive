@@ -538,7 +538,7 @@ html, body {
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         z-index: 15;
-        padding: 2rem 1.5rem;
+        padding: 2rem 1.5rem 4.5rem 1.5rem;
         overflow-y: auto;
         transition: opacity 0.3s ease;
         box-shadow: 
@@ -569,7 +569,7 @@ html, body {
     }
     
     .mobile-content-strip .description:last-child {
-        margin-bottom: 0;
+        margin-bottom: 1rem;
     }
 }
 
@@ -608,7 +608,7 @@ html, body {
         width: 100vw;
         background: var(--text-overlay-bg);
         z-index: 15;
-        padding: 1.25rem;
+        padding: 1.25rem 1.25rem 2.5rem 1.25rem;
         overflow-y: auto;
         transition: top 0.3s ease;
         box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.4);
@@ -781,7 +781,7 @@ html, body {
     
     .mobile-content-strip {
         max-height: 45vh;
-        padding: 1.5rem 1.2rem;
+        padding: 1.5rem 1.2rem 2.5rem 1.2rem;
         min-height: 180px;
     }
     
