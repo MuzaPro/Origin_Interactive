@@ -6,8 +6,8 @@ const states = {
         title: "Modular Quantum Computing",
         descriptions: [
             "Practical quantum computing requires millions of qubits working together, a scale that demands a fundamentally different approach to system architecture.",
-            "Rather than building one impossibly large machine, <span class='highlight'>ORIGIN units work together</span>, Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This fusion-based approach means computational power scales with the number of units deployed.",
-            "A facility can start with what they need today and expand as their requirements grow: from tens of units for research applications to hundreds for enterprise-scale computation."
+            "Rather than building one impossibly large machine, <span class='highlight'>ORIGIN units work together</span>, Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This approach means computational power that scales with the number of units deployed.",
+            
         ],
         image: "assets/images/state1.webp",
         svg: "assets/vector_graphics/stitching.svg"
@@ -15,28 +15,28 @@ const states = {
     2: {
         title: "Introducing ORIGIN",
         descriptions: [
-            "<span class='highlight'>ORIGIN is a deterministic resource state generator.</span> The essential building block for photonic quantum computation.",
-            "Where conventional photonic systems rely on probabilistic processes that succeed only a fraction of the time, ORIGIN takes a fundamentally different approach. By combining atomic and photonic qubits, each unit generates entangled photon clusters with unprecedented efficiency: approximately four orders of magnitude better than probabilistic methods!",
-            "The result: a system designed to fit in a standard server room rather than a factory floor. No cryogenic cooling. No specialized infrastructure. Room temperature operation with the reliability that practical deployment demands."
+            "<span class='highlight'>ORIGIN is a deterministic photonic cluster (resource) state generator.</span> The essential building block for photonic quantum computation.",
+            "Where other photonic cluster state generators rely on probabilistic processes that require about a million of attempts for each photonic qubit, ORIGIN takes a fundamentally different approach. By combining atomic and photonic qubits, each unit generates entangled photonic clusters with unprecedented efficiency: approximately four orders of magnitude better than probabilistic methods!",
+            "The result: a system designed to fit in a standard server room rather than on a factory floor the size of a few football fields. No cryogenic cooling. No specialized infrastructure. Room temperature operation with the reliability required for practical deployment."
         ],
         image: "assets/images/state2.webp",
         videoUrl: "https://youtu.be/-pp3bKn8Fg8"
     },
     3: {
-        title: "Silicon Photonics at the Core",
+        title: "Photonics Chip at the Core",
         descriptions: [
-            "At the heart of each ORIGIN unit is a photonic chip built on silicon nitride—leveraging decades of precision manufacturing developed for the telecommunications industry.",
-            "Below the chip, a cloud of Rubidium atoms is held in vacuum. Precisely controlled laser beams guide individual atoms to designated coupling sites on the chip surface, where they interact with integrated optical resonators.",
-            "This architecture achieves something remarkable: the quantum precision of isolated atoms combined with the scalability of semiconductor fabrication. Every chip is manufactured using established lithographic processes, creating a clear path from laboratory demonstration to volume production."
+            "At the heart of each ORIGIN unit is a photonic chip.",
+            "Below the chip, a cloud of Rubidium atoms is held in vacuum. Precisely controlled laser beams guide individual atoms to designated trapping sites, where they interact with high quality optical resonators."
+            
         ],
         image: "assets/images/state3.webp"
     },
     4: {
         title: "Deterministic Entanglement",
         descriptions: [
-            "The breakthrough behind ORIGIN lies in cavity quantum electrodynamics (QED): the physics of how light and matter interact in confined spaces.",
-            "When a single Rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes concentrated enough to interact with the atom deterministically, not probabilistically. This means <span class='highlight'> each photon can be generated and entangled on demand, with near-perfect efficiency.</span>",
-            "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photonic qubits, ready to be fused into the large-scale resource states that fault-tolerant quantum computing requires."
+            "The breakthrough behind ORIGIN is based on Cavity Quantum Electrodynamics (Cavity-QED): the physics of how individual atoms interact with single photons confined inside high-quality optical resonators.",
+            "When a single Rubidium atom is positioned near a high-quality optical resonator, something powerful happens: the photon's electric field becomes strong enough, for long enough time, to interact with the atom deterministically rather than probabilistically. This means that <span class='highlight'> each photon can be generated and entangled on demand, with near-perfect efficiency.</span>",
+            "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photons cluster states, ready to be stitched into the large-scale array of quantum logic required for fault-tolerant quantum computing."
         ],
         loopingVideo: "assets/animations/Resonators.webm",
         svg: "assets/vector_graphics/q-logic-gates.svg"
