@@ -509,11 +509,21 @@ async function loadSVG(svgPath, container) {
     if (!svgPath || !container) return;
     
     try {
+        // If container already has content, fade it out first
+        if (container.innerHTML.trim()) {
+            container.style.transition = 'opacity 0.2s ease-out';
+            container.style.opacity = '0';
+            
+            // Wait for fade out to complete
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+        
+        // Fetch and load the new SVG
         const response = await fetch(svgPath);
         const svgContent = await response.text();
         container.innerHTML = svgContent;
         
-        // Add fade-in animation
+        // Fade in the new SVG
         container.style.opacity = '0';
         container.style.transition = 'opacity 0.5s ease-in';
         
@@ -575,8 +585,20 @@ async function performCompoundTransition(fromState, intermediateState, toState) 
         
         // Ensure final state image and content are set correctly
         const finalState = states[toState];
-        if (finalState && finalState.image) {
-            stateVisual.src = finalState.image;
+        if (finalState) {
+            if (finalState.image) {
+                stateVisual.src = finalState.image;
+            } else if (finalState.loopingVideo) {
+                // For looping video states, ensure it's playing
+                stateAnimation.src = finalState.loopingVideo;
+                stateAnimation.loop = true;
+                stateAnimation.muted = true;
+                stateAnimation.style.opacity = '1';
+                stateAnimation.classList.add('playing');
+                stateAnimation.play().catch(err => console.warn('Failed to play looping video:', err));
+                stateVisual.style.opacity = '0';
+            }
+            // Always update content to ensure SVG is loaded
             updateContent(toState);
         }
         
