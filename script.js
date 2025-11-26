@@ -627,6 +627,20 @@ function playTransitionAnimation(animationPath, targetState) {
         const newState = states[targetState];
         const preloadedImg = newState ? preloadedImages.get(newState.image) : null;
         
+        // CRITICAL FIX: Stop any looping video before starting transition animation
+        // This prevents the looping video from state 4 blocking the transition
+        if (stateAnimation.loop) {
+            stateAnimation.pause();
+            stateAnimation.loop = false;
+            stateAnimation.classList.remove('playing');
+        }
+        
+        // CRITICAL FIX: Reset all inline styles that might interfere with transition
+        // After leaving state 4, inline opacity: 0 can block the next transition
+        stateAnimation.style.opacity = '';
+        stateAnimation.style.transition = '';
+        stateAnimation.style.transform = '';
+        
         const startAnimation = () => {
             // Ensure the video is properly reset before playing
             stateAnimation.currentTime = 0;
