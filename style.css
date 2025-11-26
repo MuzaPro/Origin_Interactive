@@ -1,3 +1,19 @@
+/**
+ * Origin Interactive Experience - Stylesheet (Production Version)
+ * 
+ * LAYOUT MODES:
+ * - Desktop (width > 768px): Sidebar with nav + content on left, visual on right
+ * - Mobile Portrait (width ≤ 768px, portrait): Top nav bar, visual below, content strip at bottom
+ * - Mobile Landscape (width ≤ 1024px, landscape): Narrow sidebar, content strip, visual on right
+ * 
+ * KEY CUSTOMIZATION POINTS:
+ * - Colors: Modify CSS variables in :root
+ * - Utility menu: Change .utility-menu { display: none; } to enable audio controls
+ * - Breakpoints: 768px mobile threshold, 1024px tablet threshold
+ * 
+ * NOTE: Uses backdrop-filter for glass morphism effects. Requires Safari 9+, Chrome 76+
+ */
+
 /* CSS Variables v13 - Modern Elegant Design with Glass Morphism */
 :root {
     --secondary-bg: #0F282D;
@@ -87,11 +103,6 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Prevent double-tap zooming */
-.background-container {
-    touch-action: none;
-}
-
 /* Desktop Layout - Default */
 .sidebar {
     position: fixed;
@@ -147,6 +158,17 @@ html, body {
     transition: transform 0.1s ease;
 }
 
+/* Ripple animation for touch feedback */
+.nav-item.ripple {
+    animation: ripple-effect 0.4s ease-out;
+}
+
+@keyframes ripple-effect {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
 /* Modern hover effect with pill expansion */
 .nav-item::before {
     content: '';
@@ -185,20 +207,13 @@ html, body {
         0 3px 12px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transform: translateX(4px);
+    animation: subtle-glow 3s ease-in-out infinite;
 }
 
-/* Add subtle glow animation for active state */
+/* Subtle glow animation for active state */
 @keyframes subtle-glow {
     0%, 100% { box-shadow: 0 6px 25px rgba(62, 193, 201, 0.15), 0 3px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
     50% { box-shadow: 0 6px 30px rgba(62, 193, 201, 0.2), 0 3px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
-}
-
-.nav-item.active {
-    background: linear-gradient(135deg, rgba(62, 193, 201, 0.2), rgba(22, 100, 112, 0.15));
-    border-color: rgba(62, 193, 201, 0.4);
-    color: white;
-    animation: subtle-glow 3s ease-in-out infinite;
-    transform: translateX(4px);
 }
 
 .nav-icon {

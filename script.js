@@ -1,3 +1,30 @@
+/**
+ * Origin Interactive Experience - Production Version
+ * 
+ * INTEGRATION GUIDE:
+ * -----------------
+ * This is a state-driven interactive experience with 4 states (views).
+ * 
+ * Required Assets:
+ * - Images: assets/images/state1.webp through state4.webp
+ * - Animations: assets/animations/*.webm (see animations object for paths)
+ * - Audio: assets/sound/buttonSFX.wav
+ * - SVGs: assets/vector_graphics/*.svg
+ * - Icons: assets/ui-icons/nav-bar/*.svg
+ * 
+ * State Machine:
+ * - State 1: Modular Quantum Computing (overview)
+ * - State 2: Introducing ORIGIN (building block)
+ * - State 3: Photonics Chip (inside the system)  
+ * - State 4: Deterministic Entanglement (the science)
+ * 
+ * Transitions use WebM videos. If no direct transition animation exists,
+ * the code performs compound transitions through intermediate states.
+ * 
+ * NOTE: The utility menu (audio toggle) is hidden by CSS.
+ * To enable it, change .utility-menu { display: none; } to { display: flex; }
+ */
+
 // State Machine for Quantum Source Interactive Experience - Optimized Version
 
 // State definitions
@@ -6,8 +33,7 @@ const states = {
         title: "Modular Quantum Computing",
         descriptions: [
             "Practical quantum computing requires millions of qubits working together, a scale that demands a fundamentally different approach to system architecture.",
-            "Rather than building one impossibly large machine, <span class='highlight'>ORIGIN units work together</span>, Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This approach means computational power that scales with the number of units deployed.",
-            
+            "Rather than building one impossibly large machine, <span class='highlight'>ORIGIN units work together</span>, Each unit generates small clusters of entangled photonic qubits, which are then \"stitched\" together into larger quantum structures. This approach means computational power that scales with the number of units deployed."
         ],
         image: "assets/images/state1.webp",
         svg: "assets/vector_graphics/stitching.svg"
@@ -27,7 +53,6 @@ const states = {
         descriptions: [
             "At the heart of each ORIGIN unit is a photonic chip.",
             "Below the chip, a cloud of Rubidium atoms is held in vacuum. Precisely controlled laser beams guide individual atoms to designated trapping sites, where they interact with high quality optical resonators."
-            
         ],
         image: "assets/images/state3.webp"
     },
@@ -147,7 +172,6 @@ const audioToggleBtn = document.querySelector('.utility-btn[title="Audio"]');
 function getLayoutMode() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const aspectRatio = width / height;
     
     if (width > 768) {
         return 'desktop';
@@ -214,19 +238,15 @@ async function preloadAllAssets() {
             video.setAttribute('disablePictureInPicture', '');
             
             video.onloadedmetadata = () => {
-                console.log(`📊 Video metadata loaded: ${key} (${path})`);
-                console.log(`   Duration: ${video.duration}s`);
-                console.log(`   Dimensions: ${video.videoWidth}x${video.videoHeight}`);
-                console.log(`   Ready state: ${video.readyState}`);
+                // Video metadata loaded
             };
             
             video.onloadeddata = () => {
-                console.log(`📦 Video data loaded: ${key}`);
                 preloadedVideos.set(path, video);
                 resolve();
             };
             video.onerror = (e) => {
-                console.error(`❌ Video load error: ${key} - ${e.message}`);
+                console.error(`Video load error: ${key}`);
                 resolve();
             };
             video.src = path;
@@ -256,11 +276,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Preload all assets in the background
     preloadAllAssets();
     
-    // Keep this to prevent unwanted interactions
-    const backgroundContainer = document.querySelector('.background-container');
-    const stateVisual = document.getElementById('stateVisual');
-    const stateAnimation = document.getElementById('stateAnimation');
-    
+    // Prevent unwanted interactions on visual elements
     const elements = [stateVisual, stateAnimation];
     const events = ['dblclick', 'contextmenu', 'mousedown', 'touchstart'];
     
@@ -346,7 +362,7 @@ function updateActiveNav(targetState = currentState) {
 }
 
 // Main transition function - optimized
-async function transitionToState(targetState, isCompoundSegment = false) {
+async function transitionToState(targetState) {
     if (isTransitioning || targetState === currentState || !states[targetState]) return;
 
     isTransitioning = true;
@@ -355,53 +371,22 @@ async function transitionToState(targetState, isCompoundSegment = false) {
     const animationPath = animations[key];
     
     try {
-        // Scroll to top when changing states (unless this is part of a compound transition)
-        if (!isCompoundSegment) {
-            const layoutMode = getLayoutMode();
-            const scrollContainer = layoutMode === 'portrait' ? mobileContentArea : contentArea;
-            if (scrollContainer) {
-                scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+        // Scroll to top when changing states
+        const layoutMode = getLayoutMode();
+        const scrollContainer = layoutMode === 'portrait' ? mobileContentArea : contentArea;
+        if (scrollContainer) {
+            scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // Start content transition immediately (unless this is part of a compound transition)
-        if (!isCompoundSegment) {
-            // Start text transition animation
-            startTextTransition(currentState, targetState);
-        }
+        // Start text transition animation
+        startTextTransition(currentState, targetState);
         
         // Check if direct animation exists
         if (animationPath) {
-            console.log(`Playing direct transition: ${currentState} → ${targetState}`);
             await playTransitionAnimation(animationPath, targetState);
-        } 
-        // Handle compound transitions
-        else {
-            // For 4->1: play seq4_reverse followed by seq3_reverse 
-            if (currentState === 4 && targetState === 1) {
-                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
-                await performCompoundTransition(currentState, 3, targetState);
-            }
-            // For 1->4: go through state 3 first
-            else if (currentState === 1 && targetState === 4) {
-                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
-                await performCompoundTransition(currentState, 3, targetState);
-            }
-            // For 2->4: go through state 3 first
-            else if (currentState === 2 && targetState === 4) {
-                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
-                await performCompoundTransition(currentState, 3, targetState);
-            }
-            // For 4->2: go through state 3 first
-            else if (currentState === 4 && targetState === 2) {
-                console.log(`Using compound transition: ${currentState} → 3 → ${targetState}`);
-                await performCompoundTransition(currentState, 3, targetState);
-            }
-            else {
-                // Fallback to instant transition
-                console.log(`No animation found for transition ${currentState}-${targetState}, using instant transition`);
-                await instantTransition(targetState);
-            }
+        } else {
+            // Use smooth fade transition
+            await fadeTransition(targetState);
         }
 
         // Update state
@@ -548,153 +533,93 @@ function clearSVG(container) {
     }, 300);
 }
 
-// Compound transition through intermediate state
-async function performCompoundTransition(fromState, intermediateState, toState) {
-    console.log(`Starting compound transition: ${fromState} → ${intermediateState} → ${toState}`);
+// Smooth fade transition for states without animation
+async function fadeTransition(targetState) {
+    const newState = states[targetState];
+    if (!newState) return;
     
-    try {
-        // Start text transition from current state to target state (skip intermediate)
-        startTextTransition(fromState, toState);
-        
-        // First leg: from current to intermediate (passing true to indicate this is part of compound)
-        const firstKey = `${fromState}-${intermediateState}`;
-        const firstAnimation = animations[firstKey];
-        
-        if (firstAnimation) {
-            await playTransitionAnimation(firstAnimation, intermediateState, true);
-            console.log(`First leg complete: ${fromState} → ${intermediateState}`);
-        } else {
-            await instantTransition(intermediateState, true);
-            console.log(`First leg complete (instant): ${fromState} → ${intermediateState}`);
-        }
-        
-        // Brief pause between animations
-        await wait(50);
-        
-        // Second leg: direct from intermediate to target
-        const secondKey = `${intermediateState}-${toState}`;
-        const secondAnimation = animations[secondKey];
-        
-        if (secondAnimation) {
-            await playTransitionAnimation(secondAnimation, toState, true);
-            console.log(`Second leg complete: ${intermediateState} → ${toState}`);
-        } else {
-            await instantTransition(toState, true);
-            console.log(`Second leg complete (instant): ${intermediateState} → ${toState}`);
-        }
-        
-        // Ensure final state image and content are set correctly
-        const finalState = states[toState];
-        if (finalState) {
-            if (finalState.image) {
-                stateVisual.src = finalState.image;
-            } else if (finalState.loopingVideo) {
-                // For looping video states, ensure it's playing
-                stateAnimation.src = finalState.loopingVideo;
-                stateAnimation.loop = true;
-                stateAnimation.muted = true;
-                stateAnimation.style.opacity = '1';
-                stateAnimation.classList.add('playing');
-                stateAnimation.play().catch(err => console.warn('Failed to play looping video:', err));
-                stateVisual.style.opacity = '0';
-            }
-            // Always update content to ensure SVG is loaded
-            updateContent(toState);
-        }
-        
-        console.log(`Compound transition complete: ${fromState} → ${intermediateState} → ${toState}`);
-    } catch (error) {
-        console.error('Error in compound transition:', error);
-        // Fallback to direct instant transition
-        await instantTransition(toState);
+    const fadeOutDuration = 300;
+    const fadeInDuration = 500;
+    
+    // Fade out current content
+    if (stateAnimation.classList.contains('playing') || stateAnimation.loop) {
+        // Fade out video
+        stateAnimation.style.transition = `opacity ${fadeOutDuration}ms ease-out`;
+        stateAnimation.style.opacity = '0';
+        await wait(fadeOutDuration);
+        stateAnimation.pause();
+        stateAnimation.loop = false;
+        stateAnimation.classList.remove('playing');
+    } else {
+        // Fade out static image
+        stateVisual.style.transition = `opacity ${fadeOutDuration}ms ease-out`;
+        stateVisual.style.opacity = '0';
+        await wait(fadeOutDuration);
     }
-}
-
-// Instant transition fallback when no animation exists
-function instantTransition(targetState, isCompoundSegment = false) {
-    return new Promise((resolve) => {
-        const newState = states[targetState];
+    
+    // Update content during fade
+    updateContent(targetState);
+    
+    // Set up new content
+    if (newState.loopingVideo) {
+        // Setup looping video
+        stateVisual.style.opacity = '0';
+        stateAnimation.src = newState.loopingVideo;
+        stateAnimation.loop = true;
+        stateAnimation.muted = true;
+        stateAnimation.classList.add('playing');
         
-        // Handle looping video
-        if (newState && newState.loopingVideo) {
-            requestAnimationFrame(() => {
-                // Hide static image
-                stateVisual.style.opacity = '0';
-                
-                // Setup looping video
-                stateAnimation.src = newState.loopingVideo;
-                stateAnimation.loop = true;
-                stateAnimation.muted = true;
-                stateAnimation.style.opacity = '1';
-                stateAnimation.classList.add('playing');
-                
-                stateAnimation.play().catch(err => {
-                    console.warn('Failed to play looping video:', err);
-                });
-                
-                if (!isCompoundSegment) {
-                    updateContent(targetState);
-                }
-                
-                requestAnimationFrame(() => {
-                    adjustPortraitLayout();
-                    setTimeout(() => {
-                        resolve();
-                    }, 16);
-                });
-            });
+        // Fade in video
+        stateAnimation.style.transition = `opacity ${fadeInDuration}ms ease-in`;
+        stateAnimation.style.opacity = '1';
+        
+        await stateAnimation.play().catch(err => {
+            console.warn('Failed to play looping video:', err);
+        });
+    } else if (newState.image) {
+        // Stop any looping video
+        if (stateAnimation.loop) {
+            stateAnimation.pause();
+            stateAnimation.loop = false;
+            stateAnimation.style.opacity = '0';
+            stateAnimation.classList.remove('playing');
         }
-        // Handle static image
-        else if (newState && newState.image) {
-            const preloadedImg = preloadedImages.get(newState.image);
-            
-            const updateImage = () => {
-                // Use requestAnimationFrame for smooth transition
-                requestAnimationFrame(() => {
-                    // Stop any looping video
-                    if (stateAnimation.loop) {
-                        stateAnimation.pause();
-                        stateAnimation.loop = false;
-                        stateAnimation.style.opacity = '0';
-                        stateAnimation.classList.remove('playing');
-                    }
-                    
-                    stateVisual.style.opacity = '1';
-                    stateVisual.src = newState.image;
-                    if (!isCompoundSegment) {
-                        updateContent(targetState);
-                    }
-                    
-                    // Wait for next frame before adjusting layout
-                    requestAnimationFrame(() => {
-                        adjustPortraitLayout();
-                        setTimeout(() => {
-                            resolve();
-                        }, 16); // One frame delay
-                    });
-                });
-            };
-            
-            if (preloadedImg) {
-                updateImage();
-            } else {
-                // Fallback if not preloaded
+        
+        // Load new image
+        const preloadedImg = preloadedImages.get(newState.image);
+        if (preloadedImg) {
+            stateVisual.src = newState.image;
+        } else {
+            // Load image if not preloaded
+            await new Promise((resolve) => {
                 const tempImg = new Image();
-                tempImg.onload = updateImage;
-                tempImg.onerror = () => {
-                    console.warn(`Failed to load image: ${newState.image}`);
+                tempImg.onload = () => {
+                    stateVisual.src = newState.image;
                     resolve();
                 };
+                tempImg.onerror = resolve;
                 tempImg.src = newState.image;
-            }
-        } else {
-            resolve();
+            });
         }
-    });
+        
+        // Fade in image
+        stateVisual.style.transition = `opacity ${fadeInDuration}ms ease-in`;
+        stateVisual.style.opacity = '1';
+    }
+    
+    // Wait for fade in to complete
+    await wait(fadeInDuration);
+    adjustPortraitLayout();
+}
+
+// Deprecated - replaced by fadeTransition
+// Kept for backward compatibility only
+function instantTransition(targetState) {
+    return fadeTransition(targetState);
 }
 
 // Play transition animation
-function playTransitionAnimation(animationPath, targetState, isCompoundSegment = false) {
+function playTransitionAnimation(animationPath, targetState) {
     return new Promise((resolve, reject) => {
         const preloadedVideo = preloadedVideos.get(animationPath);
         
@@ -702,13 +627,7 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
         const newState = states[targetState];
         const preloadedImg = newState ? preloadedImages.get(newState.image) : null;
         
-        console.log(`🎬 Starting transition: ${currentState}→${targetState} (${animationPath})`);
-        console.log(`📹 Video preloaded: ${!!preloadedVideo}`);
-        console.log(`🖼️ Target image preloaded: ${!!preloadedImg}`);
-        
         const startAnimation = () => {
-            console.log(`▶️ Starting video playback - readyState: ${stateAnimation.readyState}, duration: ${stateAnimation.duration}`);
-            
             // Ensure the video is properly reset before playing
             stateAnimation.currentTime = 0;
             stateAnimation.playbackRate = 1;
@@ -719,7 +638,6 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
             
             if (videoWidth !== standardWidth) {
                 const scaleX = standardWidth / videoWidth;
-                console.log(`🔧 Applying scale correction: ${scaleX.toFixed(4)} for ${videoWidth}px → ${standardWidth}px`);
                 stateAnimation.style.transform = `scale(${scaleX}, 1)`;
             } else {
                 stateAnimation.style.transform = '';
@@ -731,8 +649,7 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
                 
                 const playPromise = stateAnimation.play();
                 if (playPromise !== undefined) {
-                    playPromise.catch(err => {
-                        console.error('Playback error:', err);
+                    playPromise.catch(() => {
                         updateToTargetImage();
                     });
                 }
@@ -761,32 +678,17 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
         }
 
         stateAnimation.onended = () => {
-            console.log(`🏁 Video ended - currentTime: ${stateAnimation.currentTime}, duration: ${stateAnimation.duration}`);
             updateToTargetImage();
         };
 
         stateAnimation.onerror = () => {
-            console.error(`Failed to load animation: ${animationPath}`);
-            instantTransition(targetState, isCompoundSegment).then(resolve).catch(reject);
+            instantTransition(targetState).then(resolve).catch(reject);
         };
 
-        // Add additional event listeners for debugging
-        stateAnimation.onloadstart = () => console.log(`📥 Video load start: ${animationPath}`);
-        stateAnimation.oncanplay = () => console.log(`✅ Video can play - readyState: ${stateAnimation.readyState}`);
-        stateAnimation.onplaying = () => console.log(`▶️ Video playing started`);
-        stateAnimation.onseeking = () => console.log(`⏩ Video seeking to: ${stateAnimation.currentTime}`);
-        stateAnimation.onseeked = () => console.log(`⏭️ Video seek complete: ${stateAnimation.currentTime}`);
-
         function updateToTargetImage() {
-            console.log(`🖼️ Updating to target: ${newState?.image || newState?.loopingVideo}`);
-            console.log(`📐 Video final frame: ${stateAnimation.videoWidth}x${stateAnimation.videoHeight}`);
-            console.log(`📐 Container dimensions: ${stateAnimation.offsetWidth}x${stateAnimation.offsetHeight}`);
-            
             // Handle looping video target
             if (newState && newState.loopingVideo) {
                 requestAnimationFrame(() => {
-                    console.log(`🔄 Switching to looping video`);
-                    
                     // Hide static image
                     stateVisual.style.opacity = '0';
                     
@@ -798,18 +700,13 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
                     stateAnimation.style.opacity = '1';
                     stateAnimation.classList.add('playing');
                     
-                    stateAnimation.play().catch(err => {
-                        console.warn('Failed to play looping video:', err);
-                    });
+                    stateAnimation.play().catch(() => {});
                     
-                    if (!isCompoundSegment) {
-                        updateContent(targetState);
-                    }
+                    updateContent(targetState);
                     
                     adjustPortraitLayout();
                     
                     setTimeout(() => {
-                        console.log(`✅ Transition complete to looping video: ${currentState}→${targetState}`);
                         resolve();
                     }, 16);
                 });
@@ -817,14 +714,8 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
             // Handle static image target
             else if (newState && newState.image) {
                 const updateImage = () => {
-                    // Get the current visual state before switching
-                    const videoBounds = stateAnimation.getBoundingClientRect();
-                    console.log(`📊 Video bounds before switch: ${videoBounds.width}x${videoBounds.height} at (${videoBounds.left}, ${videoBounds.top})`);
-                    
                     // Use requestAnimationFrame for smooth transition
                     requestAnimationFrame(() => {
-                        console.log(`🔄 Switching image source`);
-                        
                         // Force the video to fade out faster to minimize visible switching
                         stateAnimation.style.transition = 'opacity 0.05s ease-out';
                         stateAnimation.style.opacity = '0';
@@ -838,13 +729,10 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
                         // Show static image
                         stateVisual.style.opacity = '1';
                         stateVisual.src = newState.image;
-                        if (!isCompoundSegment) {
-                            updateContent(targetState);
-                        }
+                        updateContent(targetState);
                         
                         // Wait for next frame before removing playing class
                         requestAnimationFrame(() => {
-                            console.log(`🎭 Removing playing class and finishing transition`);
                             stateAnimation.classList.remove('playing');
                             
                             // Reset transition and transform back to normal
@@ -852,15 +740,10 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
                             stateAnimation.style.opacity = '';
                             stateAnimation.style.transform = '';
                             
-                            // Get image bounds after switch
-                            const imageBounds = stateVisual.getBoundingClientRect();
-                            console.log(`📊 Image bounds after switch: ${imageBounds.width}x${imageBounds.height} at (${imageBounds.left}, ${imageBounds.top})`);
-                            
                             adjustPortraitLayout();
                             
                             // Small delay to ensure everything is settled
                             setTimeout(() => {
-                                console.log(`✅ Transition complete: ${currentState}→${targetState}`);
                                 resolve();
                             }, 16); // One frame at 60fps
                         });
@@ -873,7 +756,6 @@ function playTransitionAnimation(animationPath, targetState, isCompoundSegment =
                     const tempImg = new Image();
                     tempImg.onload = updateImage;
                     tempImg.onerror = () => {
-                        console.warn(`Failed to load image: ${newState.image}`);
                         stateAnimation.classList.remove('playing');
                         resolve();
                     };
@@ -1036,12 +918,9 @@ function setupBackgroundClickNavigation() {
     const clickCaptureLayer = document.getElementById('clickCaptureLayer');
     
     if (clickCaptureLayer) {
-        console.log('Click capture layer found, adding click listener');
-        
         ['touchstart', 'mousedown'].forEach(eventType => {
             clickCaptureLayer.addEventListener(eventType, (e) => {
                 e.preventDefault();
-                console.log('Background clicked!');
                 
                 // Define the navigation sequence
                 const nextState = {
@@ -1074,8 +953,8 @@ function setupBackgroundClickNavigation() {
 
 /* 
  * Transition Logic Summary:
- * Direct transitions: 1↔2, 2↔3, 3↔4, 3→1, 1→3
- * Compound transitions:
- * - 1→4, 2→4: go through state 3 first
- * - 4→1, 4→2: go through state 3 first
+ * Direct transitions: 1↔2, 2↔3, 1↔3
+ * Fade transitions: Used for all other state changes including to/from state 4
+ * - Smooth 300ms fade out, 500ms fade in
+ * - Handles both static images and looping videos
  */
