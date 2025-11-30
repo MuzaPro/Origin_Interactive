@@ -46,7 +46,7 @@ const states = {
             "The result: a system designed to fit in a standard server room rather than on a factory floor the size of a few football fields. No cryogenic cooling. No specialized infrastructure. Room temperature operation with the reliability required for practical deployment."
         ],
         image: "assets/images/state2.webp",
-        videoUrl: "https://youtu.be/-pp3bKn8Fg8"
+        videoUrl: "https://youtu.be/tPIVIoGIzUE"
     },
     3: {
         title: "Photonics Chip at the Core",
@@ -64,6 +64,7 @@ const states = {
             "The atom acts as a quantum mediator—creating the nonlinear interactions that photons alone cannot achieve. The result is a stream of high-quality entangled photons cluster states, ready to be stitched into the large-scale array of quantum logic required for fault-tolerant quantum computing."
         ],
         loopingVideo: "assets/animations/Resonators.webm",
+        image: "assets/images/state4.webp", // Fallback image if video fails
         svg: "assets/vector_graphics/q-logic-gates.svg"
     }
 };
@@ -569,12 +570,35 @@ async function fadeTransition(targetState) {
         stateAnimation.muted = true;
         stateAnimation.classList.add('playing');
         
+        // Add error handler for video loading failure
+        stateAnimation.onerror = () => {
+            console.warn('Looping video failed to load, using fallback image');
+            // Fall back to static image if available
+            if (newState.image) {
+                stateAnimation.style.opacity = '0';
+                stateAnimation.classList.remove('playing');
+                stateAnimation.loop = false;
+                stateVisual.src = newState.image;
+                stateVisual.style.transition = `opacity ${fadeInDuration}ms ease-in`;
+                stateVisual.style.opacity = '1';
+            }
+        };
+        
         // Fade in video
         stateAnimation.style.transition = `opacity ${fadeInDuration}ms ease-in`;
         stateAnimation.style.opacity = '1';
         
         await stateAnimation.play().catch(err => {
             console.warn('Failed to play looping video:', err);
+            // Fall back to static image if video won't play
+            if (newState.image) {
+                stateAnimation.style.opacity = '0';
+                stateAnimation.classList.remove('playing');
+                stateAnimation.loop = false;
+                stateVisual.src = newState.image;
+                stateVisual.style.transition = `opacity ${fadeInDuration}ms ease-in`;
+                stateVisual.style.opacity = '1';
+            }
         });
     } else if (newState.image) {
         // Stop any looping video
@@ -714,7 +738,30 @@ function playTransitionAnimation(animationPath, targetState) {
                     stateAnimation.style.opacity = '1';
                     stateAnimation.classList.add('playing');
                     
-                    stateAnimation.play().catch(() => {});
+                    // Add error handler for video loading failure
+                    stateAnimation.onerror = () => {
+                        console.warn('Looping video failed to load, using fallback image');
+                        // Fall back to static image if available
+                        if (newState.image) {
+                            stateAnimation.style.opacity = '0';
+                            stateAnimation.classList.remove('playing');
+                            stateAnimation.loop = false;
+                            stateVisual.src = newState.image;
+                            stateVisual.style.opacity = '1';
+                        }
+                    };
+                    
+                    stateAnimation.play().catch((err) => {
+                        console.warn('Failed to play looping video, using fallback image:', err);
+                        // Fall back to static image if video won't play
+                        if (newState.image) {
+                            stateAnimation.style.opacity = '0';
+                            stateAnimation.classList.remove('playing');
+                            stateAnimation.loop = false;
+                            stateVisual.src = newState.image;
+                            stateVisual.style.opacity = '1';
+                        }
+                    });
                     
                     updateContent(targetState);
                     
