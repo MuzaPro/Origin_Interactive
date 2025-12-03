@@ -27,6 +27,9 @@
     --glass-border: rgba(62, 193, 201, 0.1);
     --glass-hover: rgba(62, 193, 201, 0.08);
     --glass-active: linear-gradient(135deg, rgba(62, 193, 201, 0.2), rgba(22, 100, 112, 0.15));
+    /* Header height variables for proper spacing */
+    --header-height: 52px;
+    --header-height-mobile: 56px;
 }
 
 /* CSS Reset */
@@ -49,10 +52,10 @@ html, body {
 /* Full Screen Background Container */
 .background-container {
     position: fixed;
-    top: 0;
+    top: var(--header-height);
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - var(--header-height));
     z-index: 1;
     overflow: hidden;
 }
@@ -106,10 +109,10 @@ html, body {
 /* Desktop Layout - Default */
 .sidebar {
     position: fixed;
-    top: 0;
+    top: var(--header-height);
     left: 0;
     width: 30vw;
-    height: 100vh;
+    height: calc(100vh - var(--header-height));
     background: rgba(15, 40, 45, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -451,11 +454,11 @@ html, body {
         display: none;
     }
     
-    /* Mobile nav bar styling */
+    /* Mobile nav bar styling - positioned below header with generous spacing */
     .mobile-nav-bar {
         display: flex;
         position: fixed;
-        top: 0;
+        top: calc(var(--header-height-mobile) + 16px);
         left: 0;
         width: 100vw;
         height: 85px;
@@ -590,15 +593,15 @@ html, body {
 
 /* MOBILE PORTRAIT Mode - for taller screens */
 @media (max-width: 768px) and (orientation: portrait) {
-    /* Background container fills viewport */
+    /* Background container fills viewport below header and mobile nav (with spacing) */
     .background-container {
         position: fixed;
-        top: 85px;
+        top: calc(var(--header-height-mobile) + 16px + 85px);
         left: 0;
         right: 0;
         bottom: 0;
         width: 100vw;
-        height: calc(100vh - 85px);
+        height: calc(100vh - var(--header-height-mobile) - 16px - 85px);
         z-index: 1;
     }
     
@@ -641,15 +644,15 @@ html, body {
         display: none !important;
     }
     
-    /* Show landscape sidebar */
+    /* Show landscape sidebar - account for header */
     .sidebar {
         display: flex !important;
         position: fixed;
-        top: 0;
+        top: var(--header-height);
         left: 0;
         width: 17vw;
         min-width: 108px;
-        height: 100vh;
+        height: calc(100vh - var(--header-height));
         background: rgba(9, 24, 31, 0.6);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -709,14 +712,14 @@ html, body {
         display: none;
     }
     
-    /* Show desktop content area in middle */
+    /* Show desktop content area in middle - account for header */
     .content-area {
         display: block !important;
         position: fixed;
-        top: 0;
+        top: var(--header-height);
         left: 17vw;
         width: 33vw;
-        height: 100vh;
+        height: calc(100vh - var(--header-height));
         padding: 2rem 1.5rem;
         overflow-y: auto;
         background: rgba(15, 40, 45, 0.6);
@@ -738,13 +741,13 @@ html, body {
         line-height: 1.5;
     }
     
-    /* Background on right side for landscape */
+    /* Background on right side for landscape - account for header */
     .background-container {
         position: fixed;
         left: 52vw;
         right: 0;
-        top: 0;
-        height: 100vh;
+        top: var(--header-height);
+        height: calc(100vh - var(--header-height));
         width: 48vw;
         z-index: 1;
         display: block;
@@ -762,7 +765,7 @@ html, body {
     }
 }
 
-/* Small devices portrait adjustments */
+/* Small devices portrait adjustments - account for header */
 @media (max-width: 480px) and (min-height: 740px) {
     .mobile-nav-bar {
         height: 80px;
@@ -785,13 +788,13 @@ html, body {
     }
     
     .background-container {
-        top: 80px;
-        height: calc(100vh - 80px);
+        top: calc(var(--header-height-mobile) + 16px + 80px);
+        height: calc(100vh - var(--header-height-mobile) - 16px - 80px);
     }
     
     .state-visual,
     .state-animation {
-        max-height: calc(100vh - 80px - 200px); /* Adjusted for smaller nav */
+        max-height: calc(100vh - var(--header-height-mobile) - 16px - 80px - 200px); /* Adjusted for header + spacing + nav */
     }
     
     .mobile-content-strip {

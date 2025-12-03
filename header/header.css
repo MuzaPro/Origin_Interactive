@@ -28,25 +28,22 @@
 }
 
 /* Base Styles */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 20px;
-    color: #333;
-    background-color: #fff;
-}
+/* 
+ * Note: Body styles removed to prevent conflicts with main app styles.
+ * The main app's style.css handles body styling.
+ */
 
 * {
     box-sizing: border-box;
 }
 
-a {
+/* Header-specific link and image resets */
+.navbar--dark a {
     background-color: transparent;
     text-decoration: none;
 }
 
-img {
+.navbar--dark img {
     border: 0;
     vertical-align: middle;
     max-width: 100%;
@@ -73,7 +70,7 @@ img {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 9999; /* Higher z-index to ensure header stays above all app content */
 }
 
 .w-container {
